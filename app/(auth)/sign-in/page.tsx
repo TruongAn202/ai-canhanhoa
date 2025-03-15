@@ -7,12 +7,14 @@ import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useMutation } from "convex/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
 
 //chi can tao trang page trong thu muc auth/sign-in là se co trang http://localhost:3000/sign-in
 function SignIn() {
   const TaoUser = useMutation(api.users.TaoUser); //lay ham tao user bên users.ts
   const {user,setUser}=useContext(XacThucContext);
+  const router = useRouter();
   const googleLogin = useGoogleLogin({
     //import useGoogleLogin từ @react-oauth/google
     onSuccess: async (tokenResponse) => {
@@ -30,6 +32,7 @@ function SignIn() {
       });
       //console.log(" ", result);
       setUser(result);
+      router.replace('/ai-canhanhoa') // neu da dang nhap chuyen sang trang này
     },
     onError: (errorResponse) => console.log(errorResponse),
   });

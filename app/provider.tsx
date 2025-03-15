@@ -27,7 +27,7 @@ function Provider({
           </NextThemesProvider>
         </XacThucContext.Provider>
       </ConvexProvider>
-      ;
+      {/* ; dau ; cho nay lam cho app render ra du thua dau ; */}
     </GoogleOAuthProvider>
   );
 }
