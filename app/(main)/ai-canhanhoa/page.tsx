@@ -4,9 +4,14 @@ import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { ShinyButton } from "@/components/magicui/shiny-button";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { XacThucContext } from "@/context/XacThucContext";
+import { api } from "@/convex/_generated/api";
 import AICaNhanHoaList from "@/services/AICaNhanHoaList";
+import { useConvex, useMutation } from "convex/react";
+import { Loader, Loader2Icon } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation"; //bat buoc phai la navigation
+import React, { useContext, useEffect, useState } from "react";
 
 export type CANHANHOA ={
       id: number,
@@ -20,19 +25,65 @@ export type CANHANHOA ={
 
 function AICaNhanHoa() {
   const [selectedAICaNhanHoa,setSelectedAICaNhanHoa]=useState<CANHANHOA[]>([]); //trang thai
+  const insertCaNhanHoa=useMutation(api.userAiCaNhanHoa.InsertSelectedCaNhanHoa); // khai bao de dùng ở onclicktieptuc
+  const {user}=useContext(XacThucContext);//khai bao de co uid dung o onclicktieptuc
+  const [loading,setLoading] = useState(false);
 
-  const onSelect=(canhanhoa:CANHANHOA)=>{
-    const item = selectedAICaNhanHoa&&selectedAICaNhanHoa.find((item:CANHANHOA)=>item.id==canhanhoa.id);
-    if(item){
-      setSelectedAICaNhanHoa(selectedAICaNhanHoa.filter((item:CANHANHOA)=>item.id!==canhanhoa.id))
-      return ;
-    }
-    setSelectedAICaNhanHoa(prev=>[...prev, canhanhoa]);
+  const convex = useConvex(); //khao bao de dung convex.query
+  const router=useRouter(); //khai bao de dung chuyen trang
+
+  // Khi `user` thay đổi, nếu có user, thì gọi hàm `GetUserCaNhanHoa()`
+useEffect(() => {
+  user && GetUserCaNhanHoa();
+}, [user]);
+// Hàm này lấy danh sách người dùng cá nhân hóa từ Convex
+const GetUserCaNhanHoa = async () => {
+  const result = await convex.query(api.userAiCaNhanHoa.GetAllUserCaNhanHoa, {
+      uid: user._id, // Truy vấn dữ liệu dựa trên ID người dùng
+  });
+  console.log(result);
+  // Nếu đã có dữ liệu cá nhân hóa cho user, chuyển hướng đến `/workspace`
+  if (result.length > 0) {
+      router.replace('/workspace');
+      return;
   }
-  const IsCaNhanHoaSelected=(canhanhoa:CANHANHOA)=>{
-    const item = selectedAICaNhanHoa&&selectedAICaNhanHoa.find((item:CANHANHOA)=>item.id==canhanhoa.id);
-    return item?true:false
+};
+// Xử lý sự kiện khi người dùng chọn một mục cá nhân hóa
+const onSelect = (canhanhoa: CANHANHOA) => {
+  // Kiểm tra xem mục đã được chọn chưa
+  const item =
+      selectedAICaNhanHoa &&
+      selectedAICaNhanHoa.find((item: CANHANHOA) => item.id == canhanhoa.id);
+  if (item) {
+      // Nếu mục đã chọn, thì xóa khỏi danh sách
+      setSelectedAICaNhanHoa(
+          selectedAICaNhanHoa.filter((item: CANHANHOA) => item.id !== canhanhoa.id)
+      );
+      return;
   }
+  // Nếu chưa chọn, thêm mục vào danh sách
+  setSelectedAICaNhanHoa((prev) => [...prev, canhanhoa]);
+};
+// Kiểm tra xem một mục có đang được chọn hay không
+const IsCaNhanHoaSelected = (canhanhoa: CANHANHOA) => {
+  const item =
+      selectedAICaNhanHoa &&
+      selectedAICaNhanHoa.find((item: CANHANHOA) => item.id == canhanhoa.id);
+  return item ? true : false;
+};
+
+// Xử lý sự kiện khi nhấn nút "Tiếp tục"
+const OnClickTiepTuc = async () => {
+  setLoading(true); // Hiển thị trạng thái loading trong khi chờ xử lý
+  // Gửi danh sách các mục cá nhân hóa đã chọn lên server
+  const result = await insertCaNhanHoa({
+      records: selectedAICaNhanHoa,
+      uid: user?._id, // Lưu theo ID người dùng
+  });
+  setLoading(false); // Tắt trạng thái loading sau khi xử lý xong
+  console.log(result);
+};
+
   return (
     <div className="px-10 mt-20 md:px-28 lg:px-36 xl:px-48">
       <div className="flex justify-between items-center">
@@ -44,9 +95,9 @@ function AICaNhanHoa() {
           <p className="text-xl mt-2">Hãy chọn AI của bạn</p>
         </BlurFade>
         </div>
-        <ShimmerButton disabled={selectedAICaNhanHoa?.length===0} shimmerDuration="8s" className="shadow-2xl" >
+        <ShimmerButton disabled={selectedAICaNhanHoa?.length==0 || loading} shimmerDuration="8s" className="shadow-2xl" onClick={OnClickTiepTuc}>
           <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
-            Tiếp tục
+            {loading&&<Loader2Icon className="animate-spin"/>}Tiếp tục
           </span>
         </ShimmerButton> 
       </div>
