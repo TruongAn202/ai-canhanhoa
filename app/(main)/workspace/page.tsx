@@ -1,5 +1,6 @@
 import React from 'react'
 import CaNhanHoaList from './_components/CaNhanHoaList'
+import CaNhanHoaSetting from './_components/CaNhanHoaSetting'
 
 function Workspace() {
   return (
@@ -14,8 +15,8 @@ function Workspace() {
                 CHAT UI
             </div>
             <div className='hidden lg:block'>
-                CÀI ĐẶT
-                {/* setting */}
+                {/* Tao trong components, roi dua no vao day de hien thi */}
+                <CaNhanHoaSetting/> 
             </div>
         </div>
     </div>

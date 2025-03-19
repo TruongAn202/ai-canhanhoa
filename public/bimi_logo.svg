@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="gradient_bimi" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#64C2DB"/>
+      <stop offset="30%" stop-color="#7476ED"/>
+      <stop offset="60%" stop-color="#C994DF"/>
+      <stop offset="100%" stop-color="#E56F8C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon AI với mạch kết nối -->
+  <g transform="translate(64,64)">
+    <circle cx="0" cy="0" r="20" stroke="url(#gradient_bimi)" stroke-width="4" fill="none"/>
+    <line x1="-20" y1="0" x2="-32" y2="0" stroke="url(#gradient_bimi)" stroke-width="4"/>
+    <line x1="20" y1="0" x2="32" y2="0" stroke="url(#gradient_bimi)" stroke-width="4"/>
+    <line x1="0" y1="-20" x2="0" y2="-32" stroke="url(#gradient_bimi)" stroke-width="4"/>
+    <circle cx="-32" cy="0" r="4" fill="url(#gradient_bimi)"/>
+    <circle cx="32" cy="0" r="4" fill="url(#gradient_bimi)"/>
+    <circle cx="0" cy="-32" r="4" fill="url(#gradient_bimi)"/>
+  </g>
+
+  <!-- Văn bản AI Personalizer -->
+  <text x="50%" y="110" font-size="16" font-weight="bold" fill="url(#gradient_bimi)" text-anchor="middle">
+    AI Personalizer
+  </text>
+</svg>
