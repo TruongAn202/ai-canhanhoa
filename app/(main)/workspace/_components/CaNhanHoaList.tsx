@@ -9,6 +9,7 @@ import { CANHANHOA } from '../../ai-canhanhoa/page';
 import AICaNhanHoaList from '@/services/AICaNhanHoaList';
 import Image from 'next/image';
 import { CaNhanHoaContext } from '@/context/CaNhanHoaContext';
+import { BlurFade } from '@/components/magicui/blur-fade';
 
 function CaNhanHoaList() {
     const{user} = useContext(XacThucContext);
@@ -19,7 +20,7 @@ function CaNhanHoaList() {
 
     useEffect(() => {
       user && GetUserCaNhanHoa();
-    }, [user]);
+    }, [user&& canhanhoa==null]);//cap nhat ngay danh sach cac AI còn lại sau khi xoa
     // Hàm này lấy danh sách người dùng cá nhân hóa từ Convex
     const GetUserCaNhanHoa = async () => {
       const result = await convex.query(api.userAiCaNhanHoa.GetAllUserCaNhanHoa, {
@@ -36,7 +37,8 @@ function CaNhanHoaList() {
         <div className='mt-5'>
             {/* dung canhanhoaList de hien thi nhung ai da chon chu khong  phai AiCaNhanHoaList la list AI All*/}
             {caNhanHoaList.map((canhanhoa_,index)=>(
-                // cho chữ va ảnh nằm trên 1 dòng gap-3 items-center
+              <BlurFade key={canhanhoa_.image} delay={0.25 + index * 0.05} inView>
+                {/* cho chữ va ảnh nằm trên 1 dòng gap-3 items-center */}
                 <div className={`p-2 mt-2 flex gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 rounded-xl cursor-pointer
                   ${canhanhoa_.id==canhanhoa?.id&&'bg-gray-200'} 
                 `} 
@@ -53,6 +55,7 @@ function CaNhanHoaList() {
                         <h2 className='text-gray-600 dark:text-gray-300 text-sm'>{canhanhoa_.title}</h2>
                     </div>
                 </div>
+                </BlurFade>
             ))}
         </div>
         <div className='absolute bottom-10 flex gap-3 items-center hover:bg-gray-200 w-[90%] p-2 rounded-xl'>

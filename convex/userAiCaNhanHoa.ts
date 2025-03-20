@@ -51,4 +51,13 @@ export const CapNhatUserAiCaNhanHoa=mutation({
         });
         return result;
     }
+});
+
+export const XoaCaNhanHoa=mutation({
+    args:{
+        id:v.id('userAiCaNhanHoa')
+    },
+    handler:async(ctx, args)=>{
+        await ctx.db.delete(args.id);
+    }
 })

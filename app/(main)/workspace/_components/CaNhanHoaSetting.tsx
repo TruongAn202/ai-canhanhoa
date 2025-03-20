@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { format } from "date-fns"; //cai thu vien de format ngay thang nam
 import { vi } from "date-fns/locale"; // Import locale tiếng Việt
 import ConfirmationAlert from "../ConfirmationAlert";
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 function CaNhanHoaSetting() {
   //khai bao ngay thang nam theo formart
@@ -27,7 +28,8 @@ function CaNhanHoaSetting() {
   const formattedDate = format(now, "EEEE, dd MMMM yyyy 'lúc' HH:mm", { locale: vi });
 
   const { canhanhoa, setCaNhanHoa } = useContext(CaNhanHoaContext); //khi click bao 1 AI ben trai thi khung setting ben phải moi hiện lên
-  const UpdateCaNhanHoa=useMutation(api.userAiCaNhanHoa.CapNhatUserAiCaNhanHoa);
+  const CapNhatCaNhanHoa=useMutation(api.userAiCaNhanHoa.CapNhatUserAiCaNhanHoa);
+  const XoaCaNhanHoa=useMutation(api.userAiCaNhanHoa.XoaCaNhanHoa); //khai bao de dung ham xoa convex
   const [loading,setLoading]=useState(false);
   const onHandleInputChange=(field:string,value:string)=>{ //bat cu tahy doi nao ở instruction(nguoi dùng thay đổi) thì test area cua ai do cung thay doi
     setCaNhanHoa((prev:any)=>({
@@ -37,7 +39,7 @@ function CaNhanHoaSetting() {
   const OnSave=async()=>{ //nut luu, phai chon 1 model ai truoc khi them userinstruction, ko la se loi
     setLoading(true)
     
-    const result=await UpdateCaNhanHoa({
+    const result=await CapNhatCaNhanHoa({
       id:canhanhoa?._id,
       aiModelId:canhanhoa?.aiModelId,
       userInstruction:canhanhoa?.userInstruction
@@ -47,13 +49,21 @@ function CaNhanHoaSetting() {
     });
     setLoading(false);
   }
-  const OnDelete=()=>{
-    console.log('OnDelete')
+  const OnDelete=async()=>{
+    console.log('OnDelete');
+    setLoading(true)
+    await XoaCaNhanHoa({
+      id:canhanhoa?._id
+    })
+    setCaNhanHoa(null);
+    setLoading(false);
   }
   return (
     canhanhoa && (
       <div className="p-5 bg-secondary border-l-[1px] h-screen">
         <h2 className="font-bold text-xl">Cài đặt</h2>
+        {/* start ảnh và thông tin ai */}
+        <BlurFade delay={0.25}> 
         <div className="mt-4 flex gap-3">
           <Image
             src={canhanhoa?.image}
@@ -67,6 +77,10 @@ function CaNhanHoaSetting() {
             <p className="text-gray-700 dark:text-gray-300">{canhanhoa?.title}</p>
           </div>
         </div>
+        </BlurFade>
+        {/* end ảnh và thông tin ai */}
+        {/* start select chọn mô hình ai */}
+        <BlurFade delay={0.25*2}>
         <div className="mt-4">
             <h2 className="text-gray-500">Chọn mô hình AI:</h2>
             <Select defaultValue={canhanhoa.aiModelId} onValueChange={(value)=>onHandleInputChange('aiModelId',value)}>
@@ -87,6 +101,10 @@ function CaNhanHoaSetting() {
               </SelectContent>
             </Select>
           </div>
+          </BlurFade>
+          {/* end select chọn mô hình ai */}
+          {/* start textarea chỉ dẫn ai */}
+          <BlurFade delay={0.25*3}>
           <div className="mt-4">
             <h2 className="text-gray-500">Chỉ dẫn AI</h2>
             <Textarea placeholder="Thêm hướng dẫn cho AI" value={canhanhoa?.userInstruction}
@@ -94,6 +112,8 @@ function CaNhanHoaSetting() {
             onChange={(e)=>onHandleInputChange('userInstruction',e.target.value)}
             />
           </div>
+          </BlurFade>
+          {/* end textarea chỉ dẫn ai */}
           <div className="absolute bottom-10 right-5 flex gap-5">
             <ConfirmationAlert OnDelete={OnDelete}>
             <Button className="cursor-pointer" disabled={loading} variant="ghost" > <Trash/> Xóa</Button>
