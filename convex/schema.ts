@@ -16,6 +16,7 @@ export default defineSchema({
         image:v.string(),
         instruction:v.string(),
         userInstruction:v.string(),
+        aiModelId:v.optional(v.string()),
         sampleQuestions:v.any(),
         uid:v.id('users')
     })

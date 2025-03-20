@@ -13,6 +13,7 @@ export const InsertSelectedCaNhanHoa = mutation({
             args.records.map(async (record: any) =>
                 await ctx.db.insert('userAiCaNhanHoa', {
                     ...record, // Sao chép tất cả thuộc tính từ record
+                    aiModelId:'Google: Gemini 2.0 Flash', //mặc định
                     uid: args.uid, // Gán UID của người dùng để liên kết dữ liệu
                 })
             )
@@ -36,3 +37,18 @@ export const GetAllUserCaNhanHoa = query({
         return result; // Trả về danh sách các mục cá nhân hóa của user
     },
 });
+
+export const CapNhatUserAiCaNhanHoa=mutation({
+    args:{
+        id:v.id('userAiCaNhanHoa'),
+        userInstruction:v.string(),
+        aiModelId:v.string()
+    },
+    handler:async(ctx,args)=>{
+        const result=await ctx.db.patch(args.id,{
+            aiModelId:args.aiModelId,
+            userInstruction:args.userInstruction
+        });
+        return result;
+    }
+})
