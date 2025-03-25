@@ -5,7 +5,7 @@ import ChatUi from './_components/ChatUi'
 
 function Workspace() {
   return (
-    <div className='h-screen fixed w-full'>
+    <div className='h-screen fixed w-full '>
         <div className='grid grid-cols-5'>
             <div className='hidden md:block'>
                 {/* list cac AI trong _components của workspaces */}

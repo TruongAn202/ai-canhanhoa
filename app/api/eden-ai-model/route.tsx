@@ -24,7 +24,7 @@ export async function POST(req:NextRequest) {
     ]
   },
   ...(aiResp?[{
-    "role": "assistant",
+    "role": "assistant", //cai nay là assistant cua eden ai
     "content": [
       {
         "type": "text",
@@ -46,7 +46,7 @@ export async function POST(req:NextRequest) {
   const result = await response.json();
   console.log(result)
   const resp={
-    role:'canhanhoa',
+    role:'canhanhoa', //cai này phai trung voi msg.role=='canhanhoa' && <Image src={canhanhoa?.image} alt='canhanhoa' ở ChatUi.tsx để hiển thị ảnh
     content:result[provider]?.generated_text
   }
   return NextResponse.json(resp);

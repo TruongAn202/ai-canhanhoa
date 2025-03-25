@@ -1,13 +1,16 @@
 "use client"
 import { XacThucContext } from '@/context/XacThucContext'
 import Image from 'next/image'
+import { usePathname } from "next/navigation"; //phai dung navigaton vì useRouter() chỉ hoạt động với Pages Router (thư mục /pages), nhưng hiện tại đang dùng app router
 import React, { useContext } from 'react'
 
 function Header() {
+  const pathname = usePathname();
+  const isPersonalizedAI = pathname === "/ai-canhanhoa";
   const {user}=useContext(XacThucContext);
   return (
     <div className='pl-8 fixed shadow-sm flex justify-between items-center px-14' >
-      <Image src={'/logo.svg'} alt='logo' width={200} height={200}/>
+      <Image src={'/logo.svg'} alt='logo'  width={isPersonalizedAI ? 200 : 40} height={isPersonalizedAI ? 200 : 40}/>
       {user?.picture&&<Image src={user?.picture} alt='logo' 
       width={40} 
       height={40} 
