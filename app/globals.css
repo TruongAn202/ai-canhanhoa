@@ -4,6 +4,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Ẩn scrollbar trên Chrome, Edge, và Safari */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ẩn scrollbar trên Firefox */
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
+
+/* Ẩn scrollbar trên IE và Edge Legacy */
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+}
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

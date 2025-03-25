@@ -60,7 +60,7 @@ function ChatUi() {
     <div className='mt-20 p-7 relative h-[88vh]' >
          {messages?.length == 0 && <TrangThaiChatTrong/>}
          {/* có đồng thời h-[75vh] overflow-scroll thì mới có thể làm chiều cao cố định và cuộn các nội dung trong đó */}
-         <div className='h-[73vh] overflow-scroll scrollbar-hide' ref={chatRef}>
+         <div className='h-[73vh] overflow-scroll scrollbar-hidden' ref={chatRef}>
           {messages.map((msg,index)=>(
             <div key={index} className={`flex mb-2 ${msg.role=='user'?'justify-end':'justify-start'}`}>
               <div className='flex gap-3'>
