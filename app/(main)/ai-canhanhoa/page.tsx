@@ -20,7 +20,8 @@ export type CANHANHOA ={
       image: string, //neu co anh thi luu vao public va de duong dan đó
       instruction: string,
       userInstruction: string,
-      sampleQuestions: string[]
+      sampleQuestions: string[],
+      aiModelId?:string
 }
 
 function AICaNhanHoa() {

@@ -1,0 +1,158 @@
+import React, { useState } from "react";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import AICaNhanHoaList from "@/services/AICaNhanHoaList";
+import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { CANHANHOA } from "../../ai-canhanhoa/page";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import AiModeOption from "@/services/AiModeOption";
+import { Textarea } from "@/components/ui/textarea";
+const DEFAULT_CANHANHOA = {
+    image: "/baomat.png",
+    name: "",
+    title: "",
+    instruction: "",
+    id: 0,
+    sampleQuestions: [],
+    userInstruction: "",
+    aiModelId: "",
+  }
+
+function ThemMoiCaNhanHoa({ children }: any) {
+  //có 1 phần tử con trong nó ví dụ button
+  const [selectedCaNhanHoa, setSelectedCaNhanHoa] = useState<CANHANHOA>(DEFAULT_CANHANHOA);
+  const onHandleInputChange = (field: string, value: string) => {
+    setSelectedCaNhanHoa((prev: any) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Thêm AI Mới</DialogTitle>
+          <DialogDescription asChild>
+            <div className="grid grid-cols-3 mt-5 gap-5">
+              <div className="mt-5 border-r p-3">
+                <Button variant={"secondary"} size={"sm"} className="w-full cursor-pointer" onClick={()=>setSelectedCaNhanHoa(DEFAULT_CANHANHOA)}>
+                  + Tạo mới AI
+                </Button>
+                <div className="mb-2">
+                  {AICaNhanHoaList.map((canhanhoa, index) => (
+                    <div
+                      key={index}
+                      className=" p-2 hover:bg-secondary flex gap-2 items-center rounded-xl cursor-pointer"
+                      onClick={() => setSelectedCaNhanHoa(canhanhoa)}
+                    >
+                      <Image
+                        src={canhanhoa.image}
+                        width={60}
+                        height={60}
+                        alt={canhanhoa.name}
+                        className="w-[36px] h-[36px] object-cover rounded-lg"
+                      />
+                      <p className="text-xs">{canhanhoa.title}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* start form bên phải */}
+              <div className="col-span-2">
+                <div className="flex gap-5">
+                  {selectedCaNhanHoa && (
+                    <Image
+                      src={selectedCaNhanHoa?.image}
+                      alt="canhanhoa"
+                      width={100}
+                      height={100}
+                      className="w-[100ox] h-[100px] rounded-xl cursor-pointer object-cover"
+                    />
+                  )}
+                  <div className=" flex flex-col gap-3 w-full">
+                    <Input
+                      placeholder="Nhập tên của AI"
+                      className="w-full"
+                      value={selectedCaNhanHoa?.name}
+                      onChange={(event) =>
+                        onHandleInputChange("name", event.target.value)
+                      }
+                    />
+                    <Input
+                      placeholder="Nhập mô tả của AI"
+                      className="w-full"
+                      value={selectedCaNhanHoa?.title}
+                      onChange={(event) => 
+                        onHandleInputChange("title", event.target.value) //truyền prop value={selectedCaNhanHoa?.title} phải có onchange
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h2 className="text-gray-500">Chọn mô hình AI:</h2>
+                  <Select
+                    defaultValue={selectedCaNhanHoa?.aiModelId}
+                    onValueChange={(value) =>
+                      onHandleInputChange("aiModelId", value)
+                    }
+                  >
+                    <SelectTrigger className="w-full bg-white">
+                      <SelectValue placeholder="Lựa chọn AI" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {AiModeOption.map((model, index) => (
+                        <SelectItem key={index} value={model.name}>
+                          <div className="flex gap-2 items-center m-1">
+                            <Image
+                              src={model.logo}
+                              alt={model.name}
+                              width={20}
+                              height={20}
+                              className="rounded-md"
+                            />
+                            <h2>{model.name}</h2>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="mt-5">
+                    <p className="text-gray-500">Chỉ dẫn AI</p>
+                    <Textarea placeholder="Thêm chỉ dẫn cho AI"
+                    value={selectedCaNhanHoa.userInstruction}
+                    onChange={(event)=>onHandleInputChange('userInstruction',event.target.value)}
+                    className="h-[200px]"
+                    />
+                </div>
+                <div className="flex gap-5 justify-end mt-10">
+                    <Button className="cursor-pointer" variant={'secondary'}>Thoát</Button>
+                    <Button className="cursor-pointer">Lưu</Button>
+                </div>
+              </div>
+            </div>
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default ThemMoiCaNhanHoa;

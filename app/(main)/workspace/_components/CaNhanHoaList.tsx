@@ -10,6 +10,7 @@ import AICaNhanHoaList from '@/services/AICaNhanHoaList';
 import Image from 'next/image';
 import { CaNhanHoaContext } from '@/context/CaNhanHoaContext';
 import { BlurFade } from '@/components/magicui/blur-fade';
+import ThemMoiCaNhanHoa from './ThemMoiCaNhanHoa';
 
 function CaNhanHoaList() {
     const{user} = useContext(XacThucContext);
@@ -32,7 +33,9 @@ function CaNhanHoaList() {
   return (
     <div className='p-5 bg-secondary border-r-[1px] h-screen relative'>
         <h2 className='font-bold text-lg'>Danh Sách AI Của Bạn</h2>
-        <Button className='w-full mt-3'>+ Thêm AI Mới</Button>
+        <ThemMoiCaNhanHoa>
+          <Button className='w-full mt-3 cursor-pointer'>+ Thêm AI Mới</Button>
+        </ThemMoiCaNhanHoa>
         <Input className='bg-white mt-3' placeholder='Tìm kiếm'/>
         <div className='mt-5'>
             {/* dung canhanhoaList de hien thi nhung ai da chon chu khong  phai AiCaNhanHoaList la list AI All*/}

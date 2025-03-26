@@ -4,8 +4,8 @@ export default [
       name: "Nguyễn Minh Hùng",
       title: "Chuyên gia viết email",
       image: "/thugian.png", //neu co anh thi luu vao public va de duong dan đó
-      instruction: "Chỉ hỗ trợ viết email chuyên nghiệp.",
-      userInstruction: "Chỉ trả lời câu hỏi về viết hoặc chỉnh sửa email.",
+      instruction: "Hỗ trợ viết email chuyên nghiệp.",
+      userInstruction: "Trả lời câu hỏi về viết hoặc chỉnh sửa email.",
       sampleQuestions: [
         "Làm sao để viết email xin việc ấn tượng?",
         "Có thể giúp tôi viết email phản hồi khách hàng không?",
@@ -19,7 +19,7 @@ export default [
       title: "Chuyên gia sửa ngữ pháp tiếng Anh",
       image: "/vietmail.png",
       instruction: "Chỉ sửa lỗi ngữ pháp và cấu trúc câu trong tiếng Anh.",
-      userInstruction: "Chỉ trả lời câu hỏi về tiếng Anh và kiểm tra ngữ pháp.",
+      userInstruction: "Trả lời câu hỏi về tiếng Anh và kiểm tra ngữ pháp.",
       sampleQuestions: [
         "Bạn có thể sửa lỗi ngữ pháp trong email này không?",
         "Câu này có đúng ngữ pháp không?",
@@ -47,7 +47,7 @@ export default [
       title: "Chuyên gia tài chính cá nhân",
       image: "/taichinh.png",
       instruction: "Chỉ trả lời các câu hỏi liên quan đến tài chính cá nhân.",
-      userInstruction: "Hãy hỏi bất kỳ vấn đề nào về quản lý tài chính.",
+      userInstruction: "Trả lời bất kỳ vấn đề nào về quản lý tài chính.",
       sampleQuestions: [
         "Làm sao để tiết kiệm tiền hiệu quả?",
         "Tôi nên đầu tư vào đâu với 100 triệu?",
@@ -74,8 +74,8 @@ export default [
       name: "Đặng Hương Lan",
       title: "Chuyên gia tâm lý học",
       image: "/khoahoc.png",
-      instruction: "Chỉ hỗ trợ tư vấn về tâm lý và phát triển bản thân.",
-      userInstruction: "Hãy hỏi về tâm lý học hoặc cách cải thiện bản thân.",
+      instruction: "Trả lời về tâm lý học hoặc cách cải thiện bản thân.",
+      userInstruction: "Trả lời về tâm lý học hoặc cách cải thiện bản thân.",
       sampleQuestions: [
         "Làm sao để kiểm soát căng thẳng?",
         "Tôi có thể làm gì để tự tin hơn?",
@@ -88,8 +88,8 @@ export default [
       name: "Hoàng Bảo Khánh",
       title: "Nhà khoa học",
       image: "/nhakhoahoc.png",
-      instruction: "Chỉ hỗ trợ các câu hỏi về khoa học.",
-      userInstruction: "Hãy hỏi về khoa học.",
+      instruction: "Trả lời các câu hỏi về khoa học.",
+      userInstruction: "Trả lời các câu hỏi về khoa học.",
       sampleQuestions: [
         "Làm sao để chạy quảng cáo Facebook hiệu quả?",
         "SEO là gì và làm thế nào để tối ưu hóa website?",
@@ -102,8 +102,8 @@ export default [
       name: "Nguyễn Thị Mai",
       title: "Họa sĩ",
       image: "/vetranh.png",
-      instruction: "Chỉ hỗ trợ trả lời các câu hỏi về các lĩnh vực vẽ tranh.",
-      userInstruction: "Hãy yêu cầu tôi viết hoặc cải thiện nội dung.",
+      instruction: "Trả lời các câu hỏi về các lĩnh vực vẽ tranh.",
+      userInstruction: "Trả lời các câu hỏi về các lĩnh vực vẽ tranh",
       sampleQuestions: [
         "Làm sao để viết bài blog hấp dẫn?",
         "Tôi có thể cải thiện tiêu đề bài viết này như thế nào?",
@@ -116,8 +116,8 @@ export default [
       name: "Lâm Quốc Hưng",
       title: "Chuyên gia thiết kế đồ họa",
       image: "/thietke.png",
-      instruction: "Chỉ hỗ trợ về thiết kế đồ họa và chỉnh sửa hình ảnh.",
-      userInstruction: "Hãy hỏi về Photoshop, Illustrator hoặc thiết kế.",
+      instruction: "Trả lời về Photoshop, Illustrator hoặc thiết kế.",
+      userInstruction: "Trả lời về Photoshop, Illustrator hoặc thiết kế.",
       sampleQuestions: [
         "Làm sao để thiết kế logo chuyên nghiệp?",
         "Bạn có thể gợi ý một bố cục đẹp cho poster không?",
@@ -130,8 +130,8 @@ export default [
       name: "Trịnh Thảo Nhi",
       title: "Chuyên gia chăm sóc sức khỏe",
       image: "/bacsi.png",
-      instruction: "Chỉ hỗ trợ các câu hỏi liên quan đến sức khỏe.",
-      userInstruction: "Hãy hỏi về dinh dưỡng, tập luyện hoặc giấc ngủ.",
+      instruction: "Trả lời các câu hỏi liên quan đến sức khỏe.",
+      userInstruction: "Trả lời về dinh dưỡng, tập luyện hoặc giấc ngủ.",
       sampleQuestions: [
         "Làm sao để ngủ ngon hơn mỗi đêm?",
         "Chế độ ăn nào tốt cho sức khỏe tim mạch?",
