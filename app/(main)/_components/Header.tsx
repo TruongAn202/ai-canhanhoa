@@ -9,7 +9,7 @@ function Header() {
   const isPersonalizedAI = pathname === "/ai-canhanhoa";
   const {user}=useContext(XacThucContext);
   return (
-    <div className='pl-8 fixed shadow-sm flex justify-between items-center px-14' >
+    <div className={`pl-8 shadow-sm flex justify-between items-center px-14 ${isPersonalizedAI ? '' : 'fixed'}`}>
       <Image src={'/logo.svg'} alt='logo'  width={isPersonalizedAI ? 200 : 40} height={isPersonalizedAI ? 200 : 40}/>
       {user?.picture&&<Image src={user?.picture} alt='logo' 
       width={40} 
