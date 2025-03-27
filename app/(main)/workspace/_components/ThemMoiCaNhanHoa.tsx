@@ -23,6 +23,10 @@ import {
 } from "@/components/ui/select";
 import AiModeOption from "@/services/AiModeOption";
 import { Textarea } from "@/components/ui/textarea";
+import CaNhanHoaAvatar from "./CaNhanHoaAvatar";
+import { toast } from "sonner";
+
+
 const DEFAULT_CANHANHOA = {
     image: "/baomat.png",
     name: "",
@@ -37,12 +41,19 @@ const DEFAULT_CANHANHOA = {
 function ThemMoiCaNhanHoa({ children }: any) {
   //có 1 phần tử con trong nó ví dụ button
   const [selectedCaNhanHoa, setSelectedCaNhanHoa] = useState<CANHANHOA>(DEFAULT_CANHANHOA);
-  const onHandleInputChange = (field: string, value: string) => {
+  const onHandleInputChange = (field: string, value: string) => { 
+    // Hàm nhận vào hai tham số:
+    // - `field`: tên của thuộc tính trong state cần cập nhật
+    // - `value`: giá trị mới cần gán cho thuộc tính đó
     setSelectedCaNhanHoa((prev: any) => ({
-      ...prev,
-      [field]: value,
+      // Gọi hàm `setSelectedCaNhanHoa` để cập nhật state, sử dụng `prev` để lấy giá trị trước đó
+      ...prev, // Giữ lại tất cả các thuộc tính cũ trong state
+      [field]: value, // Cập nhật thuộc tính có tên `field` với giá trị mới `value`
     }));
-  };
+}
+
+
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -78,6 +89,7 @@ function ThemMoiCaNhanHoa({ children }: any) {
               <div className="col-span-2">
                 <div className="flex gap-5">
                   {selectedCaNhanHoa && (
+                    <CaNhanHoaAvatar selectedImage={(v:string)=>onHandleInputChange('image',v)}>
                     <Image
                       src={selectedCaNhanHoa?.image}
                       alt="canhanhoa"
@@ -85,7 +97,8 @@ function ThemMoiCaNhanHoa({ children }: any) {
                       height={100}
                       className="w-[100ox] h-[100px] rounded-xl cursor-pointer object-cover"
                     />
-                  )}
+                    </CaNhanHoaAvatar>
+                  ) }
                   <div className=" flex flex-col gap-3 w-full">
                     <Input
                       placeholder="Nhập tên của AI"
