@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import {
     Dialog,
@@ -18,6 +18,14 @@ import { WalletIcon } from 'lucide-react';
 
 function ProFile({ openDialog, setOpenDialog }: any) {
     const { user } = useContext(XacThucContext);
+    const [maxToken, setMaxToken]=useState<number>(0);
+    useEffect(()=>{
+        if(user?.orderId){
+            setMaxToken(500000)
+        }else{
+            setMaxToken(10000)
+        }
+    },[user])
     return (
         // onOpenChange={setOpenDialog} để dùng cho nút X thoát hoạt động
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -29,7 +37,7 @@ function ProFile({ openDialog, setOpenDialog }: any) {
                         <div>
                             {/* Start thông tin gmail */}
                             <div className='flex gap-4 items-center'>
-                                <Image src={user.picture} alt='user' width={150} height={150}
+                                <Image src={user?.picture} alt='user' width={150} height={150}
                                     className='w-[55px] h-[55px] rounded-full'
                                 />
                                 <div>
@@ -41,10 +49,10 @@ function ProFile({ openDialog, setOpenDialog }: any) {
                             {/* Start thông tin gói hiện tại*/}
                             <div className='flex flex-col gap-2 m-3'>
                                 <h2 className='font-bold'>Điểm khả dụng</h2>
-                                <h2>0/0</h2>
-                                <Progress value={33} />
+                                <h2>{user?.credits}/{maxToken}</h2>
+                                <Progress value={user?.credits / maxToken * 100} />
                                 <h2 className='flex justify-between font-bold text-lg'>Gói hiện tại
-                                    <span className='p-1 bg-gray-100 rounded-md font-normal'>{user?.orderId?'Miễn Phí': 'Cao Cấp'}</span>
+                                    <span className='p-1 bg-gray-100 rounded-md font-normal'>{user?.orderId?'Cao cấp': 'Miễn phí'}</span>
                                 </h2>
                             </div>
                             {/* Start thông gói nâng cấp */}

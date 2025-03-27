@@ -8,6 +8,11 @@ import { Loader2Icon, Send } from 'lucide-react';
 import AiModeOption from '@/services/AiModeOption';
 import axios from 'axios';
 import Image from 'next/image';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { XacThucContext } from '@/context/XacThucContext';
+import { UpdateTokens } from '@/convex/users';
+import { CANHANHOA } from '../../ai-canhanhoa/page';
 
 type MESSAGE={ //khai bao kieu du lieu neu ko setMessages sẽ bi loi
   role:string,
@@ -20,6 +25,8 @@ function ChatUi() {
   const {canhanhoa, setCaNhanHoa}=useContext(CaNhanHoaContext)
   const [input, setInput]=useState<string>('');
   const [messages, setMessages]=useState<MESSAGE[]>([]);
+  const {user, setUser} = useContext(XacThucContext);
+  const UpdateTokens=useMutation(api.users.UpdateTokens); //sử dụng hàm đã tạo ở convex
 
   useEffect(()=>{
     if(chatRef.current){
@@ -54,8 +61,26 @@ function ChatUi() {
     setLoading(false);
     setMessages(prev=>prev.slice(0,-1))
     setMessages(prev=>[...prev,result.data])
+    updateUserToken(result.data?.content)
     
   }
+//   Dùng regex /\s+/ để tách chuỗi thành mảng các từ bằng dấu cách (space), tab, hoặc newline.Ví dụ: "Hello world" → ["Hello", "world"]
+// .length: Đếm số phần tử trong mảng, tức là số lượng từ.Nếu resp là null, undefined, hoặc chỉ chứa khoảng trắng → tokenCount = 0.
+  const updateUserToken=async(resp:string)=>{
+    const tokenCount=resp&&resp.trim()?resp.trim().split(/\s+/).length:0
+    console.log(tokenCount);
+    //update user token
+    const result = await UpdateTokens({ //Gửi yêu cầu UpdateTokens({ credits: 90, uid: "user123" }) lên server.
+      credits:user?.credits-tokenCount,
+      uid:user?._id
+    });
+    setUser((prev:CANHANHOA)=>({//State của user được cập nhật ngay lập tức thành { ...prev, credits: 90 }.
+      ...prev,
+      credits:user?.credits-tokenCount,
+    }));
+    console.log(result);
+  }
+
   return (
     <div className='mt-20 p-7 relative h-[88vh]' >
          {messages?.length == 0 && <TrangThaiChatTrong/>}
@@ -81,12 +106,14 @@ function ChatUi() {
         <div className='flex justify-between p-5 gap-5 absolute bottom-5 w-[94%]'>
           <Input placeholder='Bắt đầu chat...'
             value={input}
-            disabled={loading}
+            disabled={loading || user?.credits<=0}
             onChange={(event)=>setInput(event.target.value)}
             onKeyPress={(e)=>e.key=='Enter' && onSendMessage()}
           />
           {/* xóa khung chat khi AI danng loading trả lời */}
-          <Button disabled={loading}>
+          <Button disabled={loading || user?.credits<=0} onClick={onSendMessage}
+          className={`${loading || user?.credits <= 0 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+          >
             <Send/>
           </Button>
         </div>
