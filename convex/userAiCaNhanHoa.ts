@@ -32,6 +32,7 @@ export const GetAllUserCaNhanHoa = query({
         const result = await ctx.db
             .query('userAiCaNhanHoa')
             .filter((q) => q.eq(q.field('uid'), args.uid)) // Lọc dữ liệu theo `uid`
+            .order('desc')
             .collect();
 
         return result; // Trả về danh sách các mục cá nhân hóa của user

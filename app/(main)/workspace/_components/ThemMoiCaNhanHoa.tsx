@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -25,6 +26,11 @@ import AiModeOption from "@/services/AiModeOption";
 import { Textarea } from "@/components/ui/textarea";
 import CaNhanHoaAvatar from "./CaNhanHoaAvatar";
 import { toast } from "sonner";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { XacThucContext } from "@/context/XacThucContext";
+import { CaNhanHoaContext } from "@/context/CaNhanHoaContext";
+import { Loader2Icon } from "lucide-react";
 
 
 const DEFAULT_CANHANHOA = {
@@ -41,6 +47,11 @@ const DEFAULT_CANHANHOA = {
 function ThemMoiCaNhanHoa({ children }: any) {
   //có 1 phần tử con trong nó ví dụ button
   const [selectedCaNhanHoa, setSelectedCaNhanHoa] = useState<CANHANHOA>(DEFAULT_CANHANHOA);
+  const AddCaNhanHoa=useMutation(api.userAiCaNhanHoa.InsertSelectedCaNhanHoa);
+  const {user}=useContext(XacThucContext);
+  const [loading, setLoading] = useState(false);
+  const {canhanhoa,setCaNhanHoa}=useContext(CaNhanHoaContext);
+  
   const onHandleInputChange = (field: string, value: string) => { 
     // Hàm nhận vào hai tham số:
     // - `field`: tên của thuộc tính trong state cần cập nhật
@@ -51,7 +62,20 @@ function ThemMoiCaNhanHoa({ children }: any) {
       [field]: value, // Cập nhật thuộc tính có tên `field` với giá trị mới `value`
     }));
 }
-
+const onSave=async()=>{
+  if(!selectedCaNhanHoa?.name || !selectedCaNhanHoa.title || !selectedCaNhanHoa.userInstruction){
+    toast('Bạn chưa điền đủ thông tin cho AI')
+    return ;
+  }
+  setLoading(true)
+  const result=await AddCaNhanHoa({
+    records:[selectedCaNhanHoa],
+    uid:user?._id
+  })
+  toast('Đã lưu AI thành công');
+  setCaNhanHoa(null);
+  setLoading(false); 
+}
 
 
   return (
@@ -156,8 +180,13 @@ function ThemMoiCaNhanHoa({ children }: any) {
                     />
                 </div>
                 <div className="flex gap-5 justify-end mt-10">
-                    <Button className="cursor-pointer" variant={'secondary'}>Thoát</Button>
-                    <Button className="cursor-pointer">Lưu</Button>
+                  {/* thiết lập hành động thoát cho nút này, asChild để không lỗi button lồng button */}
+                    <DialogClose asChild> 
+                      <Button className="cursor-pointer" variant={'secondary'}>Thoát</Button>
+                    </DialogClose>
+                    <Button  disabled={loading} className="cursor-pointer"
+                    onClick={onSave}
+                    > {loading&&<Loader2Icon className="animate-spin"/>}Lưu</Button>
                 </div>
               </div>
             </div>
