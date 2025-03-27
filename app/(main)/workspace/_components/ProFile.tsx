@@ -27,6 +27,7 @@ function ProFile({ openDialog, setOpenDialog }: any) {
                     <DialogTitle>{ }</DialogTitle>
                     <DialogDescription asChild>
                         <div>
+                            {/* Start thông tin gmail */}
                             <div className='flex gap-4 items-center'>
                                 <Image src={user.picture} alt='user' width={150} height={150}
                                     className='w-[55px] h-[55px] rounded-full'
@@ -37,7 +38,8 @@ function ProFile({ openDialog, setOpenDialog }: any) {
                                 </div>
                             </div>
                             <hr className='my-3'/>
-                            <div className='flex flex-col gap-2'>
+                            {/* Start thông tin gói hiện tại*/}
+                            <div className='flex flex-col gap-2 m-3'>
                                 <h2 className='font-bold'>Điểm khả dụng</h2>
                                 <h2>0/0</h2>
                                 <Progress value={33} />
@@ -45,6 +47,7 @@ function ProFile({ openDialog, setOpenDialog }: any) {
                                     <span className='p-1 bg-gray-100 rounded-md font-normal'>{user?.orderId?'Miễn Phí': 'Cao Cấp'}</span>
                                 </h2>
                             </div>
+                            {/* Start thông gói nâng cấp */}
                             <div className='p-4 border rounded-xl'>
                                 <div className='flex justify-between'>
                                     <div>
