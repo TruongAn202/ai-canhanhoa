@@ -19,16 +19,16 @@ export default function Header() {
 
       {/* Menu điều hướng */}
       <nav className="hidden md:flex gap-8 text-lg font-medium">
-        <Link href="/documentation" className="hover:text-blue-600 transition">
+        <Link href="/documentation" className="hover:text-pink-600 transition">
           Tài Liệu
         </Link>
-        <Link href="/pricing" className="hover:text-blue-600 transition">
+        <Link href="/pricing" className="hover:text-pink-600 transition">
           Đăng Ký Gói
         </Link>
-        <Link href="/blog" className="hover:text-blue-600 transition">
+        <Link href="/blog" className="hover:text-pink-600 transition">
           Blog
         </Link>
-        <Link href="/about" className="hover:text-blue-600 transition">
+        <Link href="/about" className="hover:text-pink-600 transition">
           Về Chúng Tôi
         </Link>
       </nav>
@@ -36,7 +36,7 @@ export default function Header() {
       {/* Nếu chưa đăng nhập, hiển thị nút bắt đầu */}
       {!user && (
         <Link href="/sign-in">
-          <Button variant="outline">Bắt đầu</Button>
+          <Button variant="outline" className="cursor-pointer">Bắt đầu</Button>
         </Link>
       )}
     </div>

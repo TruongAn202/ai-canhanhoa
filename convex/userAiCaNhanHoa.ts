@@ -1,5 +1,6 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { v } from "convex/values"; //dinh nghia de khai bao kieu du lieu cua convex
+import { mutation, query } from "./_generated/server"; //mutation: dùng cho những function thay đổi dữ liệu (create, update, delete).
+//query: dùng cho những function chỉ đọc dữ liệu.
 
 // Mutation để chèn danh sách các mục cá nhân hóa đã chọn vào bảng `userAiCaNhanHoa`
 export const InsertSelectedCaNhanHoa = mutation({
@@ -39,14 +40,14 @@ export const GetAllUserCaNhanHoa = query({
     },
 });
 
-export const CapNhatUserAiCaNhanHoa=mutation({
+export const CapNhatUserAiCaNhanHoa=mutation({ // ham cap nhat, chọn model ai và chi dan cua users
     args:{
         id:v.id('userAiCaNhanHoa'),
         userInstruction:v.string(),
         aiModelId:v.string()
     },
     handler:async(ctx,args)=>{
-        const result=await ctx.db.patch(args.id,{
+        const result=await ctx.db.patch(args.id,{ //patch la cú pháp để update
             aiModelId:args.aiModelId,
             userInstruction:args.userInstruction
         });
@@ -54,7 +55,7 @@ export const CapNhatUserAiCaNhanHoa=mutation({
     }
 });
 
-export const XoaCaNhanHoa=mutation({
+export const XoaCaNhanHoa=mutation({ //xoa 1 AI da them vao danh sach
     args:{
         id:v.id('userAiCaNhanHoa')
     },

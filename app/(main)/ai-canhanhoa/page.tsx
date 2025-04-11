@@ -27,16 +27,23 @@ export type CANHANHOA ={
 function AICaNhanHoa() {
   const [selectedAICaNhanHoa,setSelectedAICaNhanHoa]=useState<CANHANHOA[]>([]); //trang thai
   const insertCaNhanHoa=useMutation(api.userAiCaNhanHoa.InsertSelectedCaNhanHoa); // khai bao de dùng ở onclicktieptuc
-  const {user}=useContext(XacThucContext);//khai bao de co uid dung o onclicktieptuc
+  const {user, isLoadingUser}=useContext(XacThucContext);//khai bao de co uid dung o onclicktieptuc
   const [loading,setLoading] = useState(false);
 
   const convex = useConvex(); //khao bao de dung convex.query
   const router=useRouter(); //khai bao de dung chuyen trang
 
   // Khi `user` thay đổi, nếu có user, thì gọi hàm `GetUserCaNhanHoa()`
-useEffect(() => {
-  user && GetUserCaNhanHoa();
-}, [user]);
+  useEffect(() => { //lien quan den provider,xacthuccontext
+    if (isLoadingUser) return; //Đợi tới khi load xong user
+  
+    if (!user) {
+      router.replace('/sign-in'); //Không có user thì mới redirect
+      return;
+    }
+  
+    GetUserCaNhanHoa(); //Chỉ gọi khi có user hợp lệ
+  }, [user, isLoadingUser]);
 // Hàm này lấy danh sách người dùng cá nhân hóa từ Convex
 const GetUserCaNhanHoa = async () => {
   const result = await convex.query(api.userAiCaNhanHoa.GetAllUserCaNhanHoa, {
@@ -83,6 +90,7 @@ const OnClickTiepTuc = async () => {
   });
   setLoading(false); // Tắt trạng thái loading sau khi xử lý xong
   console.log(result);
+  router.push('/workspace');
 };
 
   return (

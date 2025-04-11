@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Header from "./(main)/_components/HeaderHome";
-
+import Footer from "@/components/footer/Footer";
 
 export default function Home() {
   const sections = [
@@ -41,7 +41,7 @@ export default function Home() {
           {" "}Theo Cách Của Bạn
         </h1>
         <p className="mt-4 text-lg text-gray-600">Thiết lập AI theo phong cách riêng của bạn.</p>
-        <Button className="mt-6 px-6 py-3 text-lg">Bắt Đầu</Button>
+        <Button className="mt-6 px-6 py-3 text-lg cursor-pointer">Bắt Đầu</Button>  
       </section>
 
       {/* Các tính năng */}
@@ -88,9 +88,7 @@ export default function Home() {
       ))}
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white text-center p-5">
-        <p>&copy; 2025 AI Cá Nhân Hóa. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

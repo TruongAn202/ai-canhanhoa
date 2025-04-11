@@ -23,7 +23,7 @@ function ProFile({ openDialog, setOpenDialog }: any) {
         if(user?.orderId){
             setMaxToken(500000)
         }else{
-            setMaxToken(10000)
+            setMaxToken(10000) //neu khong co orderId thi token mac dinh 10000
         }
     },[user])
     return (

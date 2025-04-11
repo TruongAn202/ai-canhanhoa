@@ -9,9 +9,12 @@ export const TaoUser=mutation({
     },
     handler:async(ctx,args)=>{
         //neu user co ton tai
-        const user=await ctx.db.query('users').filter(q=>q.eq(q.field('email'), args.email)).collect();
+        const user=await ctx.db
+        .query('users') //cu phap truy van tu bang users
+        .filter(q=>q.eq(q.field('email'), args.email)) // doc du lieu có email === với args.email(tham so dau vao)
+        .collect(); // tra ve mang
         //neu ko ton tai thi them mới
-        if(user?.length==0){
+        if(user?.length==0){ // neu chua co user nay thi tạo user moi
             const data = {
                 name:args.name,
                 email:args.email,
@@ -24,7 +27,7 @@ export const TaoUser=mutation({
     }
 })
 
-export const GetUser=query({
+export const GetUser=query({ //lay user dua vao email
     args:{
         email:v.string(),
     },
@@ -34,7 +37,7 @@ export const GetUser=query({
     }
 })
 
-export const UpdateTokens = mutation({
+export const UpdateTokens = mutation({ // cap nhat token
     args:{
         credits:v.number(),
         uid:v.id('users'),
