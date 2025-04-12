@@ -9,6 +9,7 @@ function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const isPersonalizedAI = pathname === "/ai-canhanhoa";
+  const isDashboard = pathname === "/dashboard";
   const { user, setUser } = useContext(XacThucContext);
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -34,8 +35,8 @@ function Header() {
   }
 
   return (
-    <div className={`pl-8 shadow-sm flex justify-between items-center px-14 ${isPersonalizedAI ? '' : 'fixed'}`}>
-      <Image src={'/logo.svg'} alt='logo' width={isPersonalizedAI ? 200 : 40} height={isPersonalizedAI ? 200 : 40} />
+    <div className={`pl-8 shadow-sm flex justify-between items-center px-14 ${isPersonalizedAI || isDashboard ? '' : 'fixed'}`}>
+      <Image src={'/logo.svg'} alt='logo' width={isPersonalizedAI || isDashboard ? 200 : 40} height={isPersonalizedAI || isDashboard ? 200 : 40} />
 
       {user?.picture && (
         <div className="relative" ref={avatarRef}>

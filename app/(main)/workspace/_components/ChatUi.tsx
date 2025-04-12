@@ -15,18 +15,18 @@ import { UpdateTokens } from '@/convex/users';
 import { CANHANHOA } from '../../ai-canhanhoa/page';
 
 type MESSAGE={ //khai bao kieu du lieu neu ko setMessages sẽ bi loi
-  role:string,
+  role:string, //xac dinh role nay cua ai hoac user
   content:string
 }
 
 function ChatUi() {
-  const [loading, setLoading]=useState(false);
-  const chatRef=useRef<any>(null);
-  const {canhanhoa, setCaNhanHoa}=useContext(CaNhanHoaContext)
-  const [input, setInput]=useState<string>('');
-  const [messages, setMessages]=useState<MESSAGE[]>([]);
-  const {user, setUser} = useContext(XacThucContext);
-  const UpdateTokens=useMutation(api.users.UpdateTokens); //sử dụng hàm đã tạo ở convex
+  const [loading, setLoading]=useState(false); //trang thai loading khi đang gửi mess cho AI
+  const chatRef=useRef<any>(null); //Ref để điều khiển scroll khung chat tự động trượt xuống cuối khi có tin nhắn mới.
+  const {canhanhoa, setCaNhanHoa}=useContext(CaNhanHoaContext) //Lấy thông tin AI cá nhân hóa đang chọn (tên, instruction, model...).
+  const [input, setInput]=useState<string>(''); // luu noi dung nguoi dung đang gõ
+  const [messages, setMessages]=useState<MESSAGE[]>([]); // mảng này chứa toan bo tin nhắn tu user và AI
+  const {user, setUser} = useContext(XacThucContext); // lay thong tin nguoi dung dang đăng nhập
+  const UpdateTokens=useMutation(api.users.UpdateTokens); //sử dụng hàm đã tạo ở convex, trừ token sau moi lan chat
 
   useEffect(()=>{
     if(chatRef.current){
@@ -34,12 +34,12 @@ function ChatUi() {
     }
   }, [messages])
 
-  useEffect(()=>{
+  useEffect(()=>{ // clear lich su chat khi nguoi dung chọn AI khác
     setMessages([]);
   },[canhanhoa?.id])
 
   const onSendMessage= async()=>{
-    setLoading(true)
+    setLoading(true) // hien thi trang thai dang xu ly
     setMessages(prev=>[...prev,
       {
         role:'user',
@@ -50,24 +50,25 @@ function ChatUi() {
         content:'Xin chờ...'
       }
     ])
-    const userInput=input;
-    setInput('');
-    const AiModel=AiModeOption.find(item=>item.name==canhanhoa.aiModelId);
-    const result= await axios.post('/api/eden-ai-model',{
-      provider:AiModel?.edenAI,
-      userInput:userInput + ":" + canhanhoa?.instruction + ":" + canhanhoa.userInstruction,
-      aiResp:messages[messages?.length-1]?.content
+    const userInput=input; // luu lai input cua user
+    setInput(''); // cleaer input
+    //Gửi request đến API để gọi AI trả lời
+    const AiModel=AiModeOption.find(item=>item.name==canhanhoa.aiModelId); //tim model ai trong mảng aiModeOption
+    const fullPrompt = `${canhanhoa?.instruction}\n${canhanhoa?.userInstruction}\n${userInput}`;
+    const result = await axios.post('/api/eden-ai-model', {
+      provider: AiModel?.edenAI,
+      userInput: fullPrompt,
+      aiResp: messages[messages?.length - 1]?.content
     });
-    setLoading(false);
-    setMessages(prev=>prev.slice(0,-1))
-    setMessages(prev=>[...prev,result.data])
-    updateUserToken(result.data?.content)
-    
+    setLoading(false); //dung load
+    setMessages(prev=>prev.slice(0,-1)) // xóa dòng xin chờ của ai(cắt mảng messages bỏ phần tử cuối cùng) prev là messages trước đó.
+    setMessages(prev=>[...prev,result.data]) // cau tra loi lay tu api cua eden ai
+    updateUserToken(result.data?.content) //tru token
   }
 //   Dùng regex /\s+/ để tách chuỗi thành mảng các từ bằng dấu cách (space), tab, hoặc newline.Ví dụ: "Hello world" → ["Hello", "world"]
 // .length: Đếm số phần tử trong mảng, tức là số lượng từ.Nếu resp là null, undefined, hoặc chỉ chứa khoảng trắng → tokenCount = 0.
   const updateUserToken=async(resp:string)=>{
-    const tokenCount=resp&&resp.trim()?resp.trim().split(/\s+/).length:0
+    const tokenCount=resp&&resp.trim()?resp.trim().split(/\s+/).length:0 // neu hop le thi tach chuoi thanh cac tu ngan cach = khoang trang
     console.log(tokenCount);
     //update user token
     const result = await UpdateTokens({ //Gửi yêu cầu UpdateTokens({ credits: 90, uid: "user123" }) lên server.

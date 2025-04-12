@@ -9,17 +9,18 @@ import { useMutation } from "convex/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
+import Header from "@/app/(main)/_components/HeaderHome";
 
 //chi can tao trang page trong thu muc auth/sign-in là se co trang http://localhost:3000/sign-in
 function SignIn() {
   const TaoUser = useMutation(api.users.TaoUser); //lay ham tao user bên users.ts
-  const {user,setUser}=useContext(XacThucContext);
+  const {user,setUser}=useContext(XacThucContext); //	Truy cập context
   const router = useRouter();
   const googleLogin = useGoogleLogin({
     //import useGoogleLogin từ @react-oauth/google
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse);
-      if (typeof window !== undefined) {
+      if (typeof window !== undefined) { //chi chay tren client-side, neu chay tren sever(node.js se loi)
         localStorage.setItem("user_token", tokenResponse.access_token);
       }
       const user = await GetAuthUserData(tokenResponse.access_token);
@@ -32,11 +33,13 @@ function SignIn() {
       });
       //console.log(" ", result);
       setUser(result);
-      router.replace('/ai-canhanhoa') // neu da dang nhap chuyen sang trang này
+      router.replace('/ai-canhanhoa') 
     },
     onError: (errorResponse) => console.log(errorResponse),
   });
   return (
+    <>
+    
     <div className="flex items-center flex-col justify-center h-screen">
       <div className=" flex flex-col items-center gap-4 border rounded-2xl p-10 shadow-md">
         {/* /logo.svg thì nextjs tu dong hieu ban muon truy cap vao duong dan chua logo */}
@@ -47,7 +50,9 @@ function SignIn() {
         <Button onClick={() => googleLogin()}>Đăng nhập với google</Button>
       </div>
     </div>
+    </>
   );
+  
 }
 
 export default SignIn;

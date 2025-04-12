@@ -22,10 +22,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { LogOut, UserCircle2 } from 'lucide-react';
 import ProFile from './ProFile';
+import { googleLogout } from '@react-oauth/google';
+import { useRouter } from 'next/navigation';
 
 
 function CaNhanHoaList() {
-  const { user } = useContext(XacThucContext);
+  const { user, setUser } = useContext(XacThucContext);
   const convex = useConvex();
 
   const [caNhanHoaList, setCaNhanHoaList] = useState<CANHANHOA[]>([]); // de set du lieu = result, nho la 1 danh sach
@@ -33,6 +35,7 @@ function CaNhanHoaList() {
 
   const [openProfile, setOpenProfile]=useState(false);
 
+  const router = useRouter();
   useEffect(() => {
     user && GetUserCaNhanHoa();
   }, [user && canhanhoa == null]);//cap nhat ngay danh sach cac AI còn lại sau khi xoa
@@ -44,6 +47,13 @@ function CaNhanHoaList() {
     console.log(result);
     setCaNhanHoaList(result);
   };
+    // Hàm đăng xuất
+    const handleLogout = () => {
+      googleLogout(); // Xóa session Google
+      setUser(null); // Xóa context user
+      localStorage.removeItem("user");
+      router.push('/sign-in'); // Chuyển về trang đăng nhập
+    }
   return (
     <div className='p-5 bg-secondary border-r-[1px] h-screen relative'>
       <h2 className='font-bold text-lg'>Danh Sách AI Của Bạn</h2>
@@ -91,7 +101,7 @@ function CaNhanHoaList() {
           <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={()=>setOpenProfile(true)}><UserCircle2/> Thông tin</DropdownMenuItem>
-          <DropdownMenuItem><LogOut/> Đăng xuất</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}><LogOut/> Đăng xuất</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {/* setOpenDialog={setOpenProfile} để nút X thoát hoạt động */}

@@ -19,5 +19,11 @@ export default defineSchema({ //chua bang
         aiModelId:v.optional(v.string()),
         sampleQuestions:v.any(), //yeu cau tu khung chat
         uid:v.id('users')
-    })
+    }),
+    support: defineTable({
+        name: v.string(),
+        email: v.string(),
+        message: v.any(),
+        status: v.optional(v.boolean()), // Thay v.boolean() bằng v.optional(v.boolean())
+      }),
 })

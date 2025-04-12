@@ -31,6 +31,9 @@ export default function Header() {
         <Link href="/about" className="hover:text-pink-600 transition">
           Về Chúng Tôi
         </Link>
+        <Link href="/lienhe" className="hover:text-pink-600 transition">
+          Liên hệ
+        </Link>
       </nav>
 
       {/* Nếu chưa đăng nhập, hiển thị nút bắt đầu */}

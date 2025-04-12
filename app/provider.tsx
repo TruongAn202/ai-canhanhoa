@@ -20,16 +20,16 @@ function Provider({
       if (user) {
         localStorage.setItem("user", JSON.stringify(user));
       }
-    }, [user]);
+    }, [user]);// chỉ chạy khi user thay đổi
   
-    //Load user từ localStorage khi app khởi động
+    //tải thông tin user từ localStorage khi app khởi động
     useEffect(() => {
-      const storedUser = localStorage.getItem("user");
+      const storedUser = localStorage.getItem("user"); // lay thong tin từ localStogare
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
+        setUser(JSON.parse(storedUser));//Cập nhật state user từ localStorage
       }
       setIsLoadingUser(false);
-    }, []);
+    }, []);//chỉ chạy 1 lần
 
   return (
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>

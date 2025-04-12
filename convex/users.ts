@@ -49,3 +49,10 @@ export const UpdateTokens = mutation({ // cap nhat token
         return result;
     }
 })
+
+export const GetAllUsers = query({
+    handler: async (ctx) => {
+      const users = await ctx.db.query("users").collect();
+      return users;
+    },
+  });
