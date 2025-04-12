@@ -53,7 +53,7 @@ export default function ContactPage() {
       <Header />
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-xl bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-          <h1 className="text-3xl font-bold mb-4 text-gray-800 text-center">Liên hệ hỗ trợ</h1>
+          <h1 className="text-3xl font-bold mb-4 text-gray-800 text-center">Liên Hệ</h1>
           <p className="text-gray-600 mb-6 text-center">
             Gửi cho chúng tôi câu hỏi hoặc yêu cầu hỗ trợ. Đội ngũ sẽ phản hồi bạn trong thời gian sớm nhất!
           </p>

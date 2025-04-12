@@ -53,7 +53,7 @@ function ChatUi() {
     const userInput=input; // luu lai input cua user
     setInput(''); // cleaer input
     //Gửi request đến API để gọi AI trả lời
-    const AiModel=AiModeOption.find(item=>item.name==canhanhoa.aiModelId); //tim model ai trong mảng aiModeOption
+    const AiModel=AiModeOption.find(item=>item.name==canhanhoa.aiModelId); 
     const fullPrompt = `${canhanhoa?.instruction}\n${canhanhoa?.userInstruction}\n${userInput}`;
     const result = await axios.post('/api/eden-ai-model', {
       provider: AiModel?.edenAI,

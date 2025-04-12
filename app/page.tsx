@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Header from "./(main)/_components/HeaderHome";
 import Footer from "@/components/footer/Footer";
+import Link from "next/link";
 
 export default function Home() {
   const sections = [
@@ -33,24 +34,37 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="h-screen flex flex-col items-center justify-center text-center p-10">
-        <h1 className="text-6xl font-bold mt-5">
+      <section className="h-screen flex flex-col items-center justify-center text-center p-10 space-y-6">
+        <h1 className="text-5xl font-bold">
           <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
             Cá Nhân Hóa AI
-          </span> 
-          {" "}Theo Cách Của Bạn
+          </span>{" "}
+          Theo Cách Của Bạn
         </h1>
-        <p className="mt-4 text-lg text-gray-600">Thiết lập AI theo phong cách riêng của bạn.</p>
-        <Button className="mt-6 px-6 py-3 text-lg cursor-pointer">Bắt Đầu</Button>  
+        <p className="text-lg text-gray-600 max-w-md">
+          Thiết lập AI theo phong cách riêng của bạn.
+        </p>
+        <video
+          src="https://framerusercontent.com/assets/JSOuDeN0xX8MygdSsw7bGJawKo.mp4"
+          width={350}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="rounded-xl shadow-lg"
+        />
+        <Link href="/sign-in">
+          <Button className="mt-4 px-6 py-3 text-lg cursor-pointer">
+            Bắt Đầu
+          </Button>
+        </Link>
       </section>
-
       {/* Các tính năng */}
       {sections.map((section, index) => (
         <motion.section
           key={index}
-          className={`h-screen flex items-center justify-center px-10 lg:px-32 ${
-            section.reverse ? "flex-row-reverse" : "flex-row"
-          }`}
+          className={`h-screen flex items-center justify-center px-10 lg:px-32 ${section.reverse ? "flex-row-reverse" : "flex-row"
+            }`}
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
