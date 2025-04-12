@@ -7,6 +7,7 @@ import DashboardTab from "./tabs/DashboardTab";
 import PaymentsTab from "./tabs/PaymentsTab";
 import AccountsTab from "./tabs/AccountsTab";
 import SupportTab from "./tabs/SupportTab";
+import BlogstTab from "./tabs/QuanLyBlog";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState("dashboard");
@@ -20,6 +21,7 @@ export default function DashboardPage() {
         {tab === "payments" && <PaymentsTab />}
         {tab === "accounts" && <AccountsTab />}
         {tab === "support" && <SupportTab />}
+        {tab === "blogs" && <BlogstTab/>}
       </main>
     </div>
   );

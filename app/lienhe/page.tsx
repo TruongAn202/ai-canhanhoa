@@ -27,14 +27,14 @@ export default function ContactPage() {
     setError(""); // Xóa lỗi khi bắt đầu gửi yêu cầu
     try {
       await createSupportTicket({ name, email, message });
-      alert("🎉 Gửi yêu cầu thành công! Chúng tôi sẽ phản hồi sớm nhất.");
+      alert("Gửi yêu cầu thành công! Chúng tôi sẽ phản hồi sớm nhất.");
       setName("");
       setEmail("");
       setMessage("");
       setCharCount(0); // Reset số ký tự sau khi gửi
     } catch (err) {
       console.error(err);
-      alert("❌ Có lỗi xảy ra. Vui lòng thử lại sau.");
+      alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
     } finally {
       setLoading(false);
     }

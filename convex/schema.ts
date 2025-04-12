@@ -26,4 +26,13 @@ export default defineSchema({ //chua bang
         message: v.any(),
         status: v.optional(v.boolean()), // Thay v.boolean() bằng v.optional(v.boolean())
       }),
+    blog: defineTable({
+    title: v.string(),
+    description: v.string(),
+    author: v.string(),
+    category: v.string(),
+    slug: v.string(),
+    date: v.string(), // ISO string (ví dụ: new Date().toISOString())
+    content: v.string(),
+  }),
 })
