@@ -51,9 +51,22 @@ function CaNhanHoaList() {
     const handleLogout = () => {
       googleLogout(); // Xóa session Google
       setUser(null); // Xóa context user
-      localStorage.removeItem("user");
-      router.push('/sign-in'); // Chuyển về trang đăng nhập
-    }
+    
+      localStorage.clear();
+      sessionStorage.clear();
+    
+      // Xóa cookie (nếu có)
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+    
+      setTimeout(() => {
+        router.push("/sign-in");
+      }, 100); // Delay nhỏ để đảm bảo state được reset
+    };
+    
   return (
     <div className='p-5 bg-secondary border-r-[1px] h-screen relative'>
       <h2 className='font-bold text-lg'>Danh Sách AI Của Bạn</h2>

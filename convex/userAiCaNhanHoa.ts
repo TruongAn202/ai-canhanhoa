@@ -26,9 +26,10 @@ export const InsertSelectedCaNhanHoa = mutation({
 // Query để lấy danh sách các mục cá nhân hóa của một user cụ thể
 export const GetAllUserCaNhanHoa = query({
     args: {
-        uid: v.id('users'), // `uid` là ID của người dùng, dùng để lọc dữ liệu
+        uid: v.optional(v.id('users')), // `uid` là ID của người dùng, dùng để lọc dữ liệu
     },
     handler: async (ctx, args) => {
+        if (!args.uid) return [];
         // Truy vấn tất cả các bản ghi trong `userAiCaNhanHoa` có `uid` khớp với người dùng hiện tại
         const result = await ctx.db
             .query('userAiCaNhanHoa')

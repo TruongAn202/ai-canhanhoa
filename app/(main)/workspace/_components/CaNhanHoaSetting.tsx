@@ -28,32 +28,32 @@ function CaNhanHoaSetting() {
   const formattedDate = format(now, "EEEE, dd MMMM yyyy 'lúc' HH:mm", { locale: vi });
 
   const { canhanhoa, setCaNhanHoa } = useContext(CaNhanHoaContext); //khi click bao 1 AI ben trai thi khung setting ben phải moi hiện lên
-  const CapNhatCaNhanHoa=useMutation(api.userAiCaNhanHoa.CapNhatUserAiCaNhanHoa);
-  const XoaCaNhanHoa=useMutation(api.userAiCaNhanHoa.XoaCaNhanHoa); //khai bao de dung ham xoa convex
-  const [loading,setLoading]=useState(false);
-  const onHandleInputChange=(field:string,value:string)=>{ //bat cu tahy doi nao ở instruction(nguoi dùng thay đổi) thì test area cua ai do cung thay doi
-    setCaNhanHoa((prev:any)=>({
-      ...prev,[field]:value
+  const CapNhatCaNhanHoa = useMutation(api.userAiCaNhanHoa.CapNhatUserAiCaNhanHoa);
+  const XoaCaNhanHoa = useMutation(api.userAiCaNhanHoa.XoaCaNhanHoa); //khai bao de dung ham xoa convex
+  const [loading, setLoading] = useState(false);
+  const onHandleInputChange = (field: string, value: string) => { //bat cu tahy doi nao ở instruction(nguoi dùng thay đổi) thì test area cua ai do cung thay doi
+    setCaNhanHoa((prev: any) => ({
+      ...prev, [field]: value
     }))
   }
-  const OnSave=async()=>{ //nut luu, phai chon 1 model ai truoc khi them userinstruction, ko la se loi
+  const OnSave = async () => { //nut luu, phai chon 1 model ai truoc khi them userinstruction, ko la se loi
     setLoading(true)
-    
-    const result=await CapNhatCaNhanHoa({
-      id:canhanhoa?._id,
-      aiModelId:canhanhoa?.aiModelId,
-      userInstruction:canhanhoa?.userInstruction
+
+    const result = await CapNhatCaNhanHoa({
+      id: canhanhoa?._id,
+      aiModelId: canhanhoa?.aiModelId,
+      userInstruction: canhanhoa?.userInstruction
     })
     toast("Đã lưu", {
       description: <span className="text-gray-500 dark:text-gray-300">{formattedDate}</span>,
     });
     setLoading(false);
   }
-  const OnDelete=async()=>{
+  const OnDelete = async () => {
     console.log('OnDelete');
     setLoading(true)
     await XoaCaNhanHoa({
-      id:canhanhoa?._id
+      id: canhanhoa?._id
     })
     setCaNhanHoa(null);
     setLoading(false);
@@ -63,32 +63,32 @@ function CaNhanHoaSetting() {
       <div className="p-5 bg-secondary border-l-[1px] h-screen">
         <h2 className="font-bold text-xl">Cài đặt</h2>
         {/* start ảnh và thông tin ai */}
-        <BlurFade delay={0.25}> 
-        <div className="mt-4 flex gap-3">
-          <Image
-            src={canhanhoa?.image}
-            alt="canhanhoa"
-            width={95}
-            height={95}
-            className="rounded-xl h-[75px] w-[75px]"
-          />
-          <div>
-            <h2 className="font-bold">{canhanhoa?.name}</h2>
-            <p className="text-gray-700 dark:text-gray-300">{canhanhoa?.title}</p>
+        <BlurFade delay={0.25}>
+          <div className="mt-4 flex gap-3">
+            <Image
+              src={canhanhoa?.image}
+              alt="canhanhoa"
+              width={95}
+              height={95}
+              className="rounded-xl h-[75px] w-[75px]"
+            />
+            <div>
+              <h2 className="font-bold">{canhanhoa?.name}</h2>
+              <p className="text-gray-700 dark:text-gray-300">{canhanhoa?.title}</p>
+            </div>
           </div>
-        </div>
         </BlurFade>
         {/* end ảnh và thông tin ai */}
         {/* start select chọn mô hình ai */}
-        <BlurFade delay={0.25*2}>
-        <div className="mt-4">
+        <BlurFade delay={0.25 * 2}>
+          <div className="mt-4">
             <h2 className="text-gray-500">Chọn mô hình AI:</h2>
-            <Select defaultValue={canhanhoa.aiModelId} onValueChange={(value)=>onHandleInputChange('aiModelId',value)}>
+            <Select defaultValue={canhanhoa.aiModelId} onValueChange={(value) => onHandleInputChange('aiModelId', value)}>
               <SelectTrigger className="w-full bg-white">
                 <SelectValue placeholder="Lựa chọn AI" />
               </SelectTrigger>
               <SelectContent>
-                {AiModeOption.map((model,index)=>(
+                {AiModeOption.map((model, index) => (
                   <SelectItem key={index} value={model.name}>
                     <div className="flex gap-2 items-center m-1">
                       <Image src={model.logo} alt={model.name} width={20} height={20}
@@ -101,25 +101,27 @@ function CaNhanHoaSetting() {
               </SelectContent>
             </Select>
           </div>
-          </BlurFade>
-          {/* end select chọn mô hình ai */}
-          {/* start textarea chỉ dẫn ai */}
-          <BlurFade delay={0.25*3}>
+        </BlurFade>
+        {/* end select chọn mô hình ai */}
+        {/* start textarea chỉ dẫn ai */}
+        <BlurFade delay={0.25 * 3}>
           <div className="mt-4">
             <h2 className="text-gray-500">Chỉ dẫn AI</h2>
             <Textarea placeholder="Thêm hướng dẫn cho AI" value={canhanhoa?.userInstruction}
-            className="h-[180px] bg-white"
-            onChange={(e)=>onHandleInputChange('userInstruction',e.target.value)}
+              className="h-[180px] bg-white"
+              onChange={(e) => onHandleInputChange('userInstruction', e.target.value)}
             />
           </div>
-          </BlurFade>
-          {/* end textarea chỉ dẫn ai */}
-          <div className="absolute bottom-10 right-5 flex gap-5">
-            <ConfirmationAlert OnDelete={OnDelete}>
-            <Button className="cursor-pointer" disabled={loading} variant="ghost" > <Trash/> Xóa</Button>
-            </ConfirmationAlert>
-            <Button className="cursor-pointer" onClick={OnSave} disabled={loading}> {loading?<Loader2Icon className=" animate-spin"/> : <Save/> }Lưu</Button>
-          </div>
+        </BlurFade>
+        {/* end textarea chỉ dẫn ai */}
+        <div className="absolute bottom-10 right-5 flex gap-5">
+          <ConfirmationAlert OnDelete={OnDelete}>
+            <Button className="cursor-pointer" disabled={loading} variant="ghost" > <Trash /> Xóa</Button>
+          </ConfirmationAlert>
+          <Button className="cursor-pointer" onClick={OnSave} disabled={loading}>
+            {loading ? 'Đang lưu...' : 'Lưu'}
+          </Button>
+        </div>
       </div>
     )
   );

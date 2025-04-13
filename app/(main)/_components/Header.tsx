@@ -30,10 +30,22 @@ function Header() {
   const handleLogout = () => {
     googleLogout(); // Xóa session Google
     setUser(null); // Xóa context user
-    localStorage.removeItem("user");
-    router.push('/sign-in'); // Chuyển về trang đăng nhập
-  }
-
+  
+    localStorage.clear();
+    sessionStorage.clear();
+  
+    // Xóa cookie (nếu có)
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+  
+    setTimeout(() => {
+      router.push("/sign-in");
+    }, 100); // Delay nhỏ để đảm bảo state được reset
+  };
+  
   return (
     <div className={`pl-8 shadow-sm flex justify-between items-center px-14 ${isPersonalizedAI || isDashboard ? '' : 'fixed'}`}>
       <Image src={'/logo.svg'} alt='logo' width={isPersonalizedAI || isDashboard ? 200 : 40} height={isPersonalizedAI || isDashboard ? 200 : 40} />

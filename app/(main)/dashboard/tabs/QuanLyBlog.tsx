@@ -6,16 +6,16 @@ import { useState } from "react";
 export default function QuanLyBlog() {
   const themBlog = useMutation(api.blogs.ThemBlog);
   const danhSachBlog = useQuery(api.blogs.GetTatCaBlog);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState({ //khoi tao state form lưu trữ dữ liệu.
     title: "",
     description: "",
     author: "",
     category: "AI Cá Nhân Hóa",
     slug: "",
-    content: "", // Thêm trường content
+    content: "", 
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: any) => { // su ly thay doi trong form
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -26,7 +26,7 @@ export default function QuanLyBlog() {
       return;
     }
 
-    await themBlog({
+    await themBlog({ //gui du lieu blog moi va ngay hien tai luu vao convex
       ...form,
       date: new Date().toISOString(),
     });

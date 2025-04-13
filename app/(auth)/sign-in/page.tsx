@@ -17,26 +17,36 @@ function SignIn() {
   const {user,setUser}=useContext(XacThucContext); //	Truy cập context
   const router = useRouter();
   const googleLogin = useGoogleLogin({
-    //import useGoogleLogin từ @react-oauth/google
-    onSuccess: async (tokenResponse) => {
-      console.log(tokenResponse);
-      if (typeof window !== undefined) { //chi chay tren client-side, neu chay tren sever(node.js se loi)
-        localStorage.setItem("user_token", tokenResponse.access_token);
+    // import useGoogleLogin từ @react-oauth/google
+    onSuccess: async (tokenResponse) => {//dn thanh cong
+      //console.log(tokenResponse);
+  
+      if (typeof window !== "undefined") {//dam bao chay o client
+        // Lưu token vào localStorage
+        localStorage.setItem("user_token", tokenResponse.access_token); 
       }
-      const user = await GetAuthUserData(tokenResponse.access_token);
-      //save user info
-      //console.log(user);
-      const result = await TaoUser({
+  
+      const user = await GetAuthUserData(tokenResponse.access_token); // dung token de lay thong tin user
+  
+      const result = await TaoUser({ //dùng hàm taouser cua convex, chua co tk thi tao moi
         name: user?.name,
         email: user?.email,
         picture: user.picture,
       });
-      //console.log(" ", result);
-      setUser(result);
-      router.replace('/ai-canhanhoa') 
+  
+      setUser(result); // tra full bảng
+  
+      
+      const userWithRole = result as { role?: string };//ép kieu de kq tra ve hieu la co role
+      if (userWithRole.role === "admin") {
+        router.replace("/dashboard");
+      } else {
+        router.replace("/ai-canhanhoa");
+      }
     },
     onError: (errorResponse) => console.log(errorResponse),
   });
+  
   return (
     <>
     

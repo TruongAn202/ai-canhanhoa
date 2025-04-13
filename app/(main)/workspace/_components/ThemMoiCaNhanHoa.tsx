@@ -41,25 +41,21 @@ const DEFAULT_CANHANHOA = {
   id: 0,
   sampleQuestions: [],
   userInstruction: "",
-  aiModelId: "",
+  aiModelId: AiModeOption[0]?.name,
 }
 
 function ThemMoiCaNhanHoa({ children }: any) {
   //có 1 phần tử con trong nó ví dụ button
   const [selectedCaNhanHoa, setSelectedCaNhanHoa] = useState<CANHANHOA>(DEFAULT_CANHANHOA);
-  const AddCaNhanHoa = useMutation(api.userAiCaNhanHoa.InsertSelectedCaNhanHoa);
+  const AddCaNhanHoa = useMutation(api.userAiCaNhanHoa.InsertSelectedCaNhanHoa);//ham them ai 
   const { user } = useContext(XacThucContext);
   const [loading, setLoading] = useState(false);
   const { canhanhoa, setCaNhanHoa } = useContext(CaNhanHoaContext);
 
   const onHandleInputChange = (field: string, value: string) => {
-    // Hàm nhận vào hai tham số:
-    // - `field`: tên của thuộc tính trong state cần cập nhật
-    // - `value`: giá trị mới cần gán cho thuộc tính đó
     setSelectedCaNhanHoa((prev: any) => ({
-      // Gọi hàm `setSelectedCaNhanHoa` để cập nhật state, sử dụng `prev` để lấy giá trị trước đó
-      ...prev, // Giữ lại tất cả các thuộc tính cũ trong state
-      [field]: value, // Cập nhật thuộc tính có tên `field` với giá trị mới `value`
+      ...prev, //giu lai cac trường cũ
+      [field]: value, 
     }));
   }
   const onSave = async () => {
@@ -68,7 +64,7 @@ function ThemMoiCaNhanHoa({ children }: any) {
       return;
     }
     setLoading(true)
-    const result = await AddCaNhanHoa({
+    const result = await AddCaNhanHoa({ //them list AI vao csdl
       records: [selectedCaNhanHoa],
       uid: user?._id
     })
@@ -145,10 +141,9 @@ function ThemMoiCaNhanHoa({ children }: any) {
                 <div className="mt-4">
                   <h2 className="text-gray-500">Chọn mô hình AI:</h2>
                   <Select
-                    defaultValue={selectedCaNhanHoa?.aiModelId}
-                    onValueChange={(value) =>
-                      onHandleInputChange("aiModelId", value)
-                    }
+                    key={selectedCaNhanHoa?.aiModelId} // 👈 mỗi lần thay đổi sẽ reset an toàn
+                    value={selectedCaNhanHoa?.aiModelId}
+                    onValueChange={(value) => onHandleInputChange("aiModelId", value)}
                   >
                     <SelectTrigger className="w-full bg-white">
                       <SelectValue placeholder="Lựa chọn AI" />
@@ -184,9 +179,9 @@ function ThemMoiCaNhanHoa({ children }: any) {
                   <DialogClose asChild>
                     <Button className="cursor-pointer" variant={'secondary'}>Thoát</Button>
                   </DialogClose>
-                  <Button disabled={loading} className="cursor-pointer"
-                    onClick={onSave}
-                  > {loading && <Loader2Icon className="animate-spin" />}Lưu</Button>
+                  <Button disabled={loading} className="cursor-pointer" onClick={onSave}>
+                    {loading ? 'Đang lưu...' : 'Lưu'}
+                  </Button>
                 </div>
               </div>
             </div>
