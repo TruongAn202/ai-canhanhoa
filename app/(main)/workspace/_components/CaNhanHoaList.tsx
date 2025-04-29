@@ -113,8 +113,8 @@ function CaNhanHoaList() {
         <DropdownMenuContent>
           <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={()=>setOpenProfile(true)}><UserCircle2/> Thông tin</DropdownMenuItem>
-          <DropdownMenuItem onClick={handleLogout}><LogOut/> Đăng xuất</DropdownMenuItem>
+          <DropdownMenuItem className='cursor-pointer' onClick={()=>setOpenProfile(true)}><UserCircle2/> Thông tin</DropdownMenuItem>
+          <DropdownMenuItem className='cursor-pointer' onClick={handleLogout}><LogOut/> Đăng xuất</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {/* setOpenDialog={setOpenProfile} để nút X thoát hoạt động */}

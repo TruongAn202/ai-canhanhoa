@@ -20,6 +20,7 @@ export default function SupportTab() {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Chi tiết yêu cầu hỗ trợ</h1>
+        
         <div className="bg-white border rounded-lg p-6 shadow-md max-w-2xl">
           <p><strong>ID:</strong> {selectedTicket._id}</p>
           <p><strong>Họ tên:</strong> {selectedTicket.name}</p>
@@ -68,6 +69,7 @@ export default function SupportTab() {
             </Button>
           </div>
         </div>
+      
       </div>
     );
   }
@@ -76,10 +78,11 @@ export default function SupportTab() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Yêu cầu hỗ trợ</h1>
+      <div className="h-[500px] overflow-auto border border-gray-300 rounded-md">
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-300">
           <thead>
-            <tr className="bg-gray-100 text-left text-sm font-medium text-gray-700">
+            <tr className="bg-gray-200 text-black">
               <th className="px-4 py-3 border border-gray-300">Tên người dùng</th>
               <th className="px-4 py-3 border border-gray-300">Email</th>
               <th className="px-4 py-3 border border-gray-300">Trạng thái</th>
@@ -105,6 +108,7 @@ export default function SupportTab() {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   );

@@ -2,14 +2,16 @@ import { BarChart3 } from "lucide-react";
 
 export default function Sidebar({ tab, setTab }: { tab: string; setTab: (value: string) => void }) {
   return (
+    // border-r nghĩa là thêm viền bên phải.aside
     <aside className="w-64 bg-white p-4 border-r border-gray-300">
-      <nav className="space-y-4 text-sm">
+      <div className="text-xl font-semibold text-gray-700 mb-6 px-1">Xin chào, Admin</div>
+      <nav className="space-y-4 text-xl">
         <div
           onClick={() => setTab("dashboard")}
           className={`flex items-center gap-2 cursor-pointer font-medium ${tab === "dashboard" ? "text-black" : "text-gray-500 hover:text-black"
             }`}
         >
-          <BarChart3 size={16} /> Dashboard
+          <BarChart3 size={24} /> Dashboard
         </div>
         <div
           onClick={() => setTab("payments")}

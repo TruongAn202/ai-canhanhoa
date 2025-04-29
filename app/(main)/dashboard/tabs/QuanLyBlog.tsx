@@ -98,9 +98,10 @@ export default function QuanLyBlog() {
       </button>
 
       <h3 className="text-xl font-semibold mt-8">Danh sách blog đã thêm</h3>
+      <div className="h-[500px] overflow-auto border border-gray-300 rounded-md">
       <table className="w-full table-auto border mt-2">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-gray-200 text-black">
             <th className="p-2 border">Tiêu đề</th>
             <th className="p-2 border">Tác giả</th>
             <th className="p-2 border">Thể loại</th>
@@ -120,6 +121,7 @@ export default function QuanLyBlog() {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

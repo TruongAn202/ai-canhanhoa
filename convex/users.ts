@@ -58,3 +58,43 @@ export const GetAllUsers = query({
       return users;
     },
   });
+
+  //phan quyen
+  export const UpdateUserRole = mutation({
+    args: {
+      userId: v.id('users'),
+      role: v.string(), // Cập nhật role, có thể là "admin" hoặc "user"
+    },
+    handler: async (ctx, args) => {
+      const user = await ctx.db.query("users").filter(q => q.eq(q.field("_id"), args.userId)).first();
+      if (!user) {
+        throw new Error("User not found");
+      }
+      
+      await ctx.db.patch(user._id, {
+        role: args.role, // Cập nhật role của người dùng
+      });
+  
+      return { success: true, message: `Role updated to ${args.role}` };
+    },
+  });
+  
+  //xoa tai khoan
+  export const DeleteUser = mutation({
+    args: {
+      userId: v.id('users'),
+    },
+    handler: async (ctx, args) => {
+      const user = await ctx.db.query("users").filter(q => q.eq(q.field("_id"), args.userId)).first();  // Sử dụng _id thay vì id
+      if (!user) {
+        throw new Error("User not found");
+      }
+  
+      // Xóa tài khoản
+      await ctx.db.delete( user._id); // chi can id
+  
+      return { success: true, message: "User deleted successfully" };
+    },
+  });
+  
+  

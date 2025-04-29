@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as blogs from "../blogs.js";
+import type * as momoTransactions from "../momoTransactions.js";
 import type * as support from "../support.js";
 import type * as userAiCaNhanHoa from "../userAiCaNhanHoa.js";
 import type * as users from "../users.js";
@@ -28,6 +29,7 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   blogs: typeof blogs;
+  momoTransactions: typeof momoTransactions;
   support: typeof support;
   userAiCaNhanHoa: typeof userAiCaNhanHoa;
   users: typeof users;
