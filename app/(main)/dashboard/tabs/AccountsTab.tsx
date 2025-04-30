@@ -11,7 +11,13 @@ export default function AccountsTab() {
   const deleteUser = useMutation(api.users.DeleteUser);
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5; // số dòng mỗi trang
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const totalPages = Math.ceil((users?.length || 0) / rowsPerPage);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const paginatedUsers = users?.slice(startIndex, startIndex + rowsPerPage);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -70,7 +76,7 @@ export default function AccountsTab() {
             </tr>
           </thead>
           <tbody>
-            {users?.map((user) => (
+            {paginatedUsers?.map((user) => (
               <tr key={user._id} className="text-sm text-gray-800 hover:bg-gray-50 transition cursor-pointer">
                 <td className="px-4 py-2 border border-gray-300">{user.name}</td>
                 <td className="px-4 py-2 border border-gray-300">{user.email}</td>
@@ -130,8 +136,34 @@ export default function AccountsTab() {
                 </td>
               </tr>
             ))}
+            {!users && (
+              <tr>
+                <td colSpan={6} className="text-left py-4">Đang tải...</td>
+              </tr>
+            )}
           </tbody>
         </table>
+      </div>
+
+      {/* Phân trang */}
+      <div className="mt-4 flex justify-center gap-2">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-3 py-1 border rounded disabled:opacity-50 cursor-pointer"
+        >
+          Trang trước
+        </button>
+        <span className="px-3 py-1">
+          Trang {currentPage} / {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 border rounded disabled:opacity-50 cursor-pointer"
+        >
+          Trang sau
+        </button>
       </div>
     </div>
   );

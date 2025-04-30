@@ -11,6 +11,7 @@ export default function QuanLyBlog() {
   const danhSachCategories = useQuery(api.blogCategories.GetAllCategories);
   const danhSachBlog = useQuery(api.blogs.GetTatCaBlog);
   const capNhatBlog = useMutation(api.blogs.CapNhatBlog);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -21,8 +22,16 @@ export default function QuanLyBlog() {
   });
 
   const [newCategory, setNewCategory] = useState("");
-  const [editing, setEditing] = useState(false);  // Flag để xác định chế độ sửa
+  const [editing, setEditing] = useState(false);
   const [currentBlogId, setCurrentBlogId] = useState<Id<"blog"> | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const blogsPerPage = 5;
+
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = danhSachBlog?.slice(indexOfFirstBlog, indexOfLastBlog);
+  const totalPages = danhSachBlog ? Math.ceil(danhSachBlog.length / blogsPerPage) : 1;
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -36,25 +45,17 @@ export default function QuanLyBlog() {
     }
 
     if (editing && currentBlogId) {
-      // If editing, update the blog
       await capNhatBlog({
         id: currentBlogId,
-        title: form.title,
-        description: form.description,
-        author: form.author,
-        category: form.category,
-        slug: form.slug,
-        content: form.content,
+        ...form,
       });
     } else {
-      // If adding new, create the blog
       await themBlog({
         ...form,
         date: new Date().toISOString(),
       });
     }
-    
-    // Reset form và chế độ sửa
+
     setForm({
       title: "",
       description: "",
@@ -82,7 +83,6 @@ export default function QuanLyBlog() {
   };
 
   const handleEdit = (blog: any) => {
-    // Khi click vào một bài viết, cập nhật form với dữ liệu của bài viết đó và bật chế độ sửa
     setForm({
       title: blog.title,
       description: blog.description,
@@ -92,56 +92,23 @@ export default function QuanLyBlog() {
       content: blog.content,
     });
     setEditing(true);
-    setCurrentBlogId(blog._id);  // Lưu ID của bài viết đang chỉnh sửa
+    setCurrentBlogId(blog._id);
   };
 
   return (
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold">{editing ? "Chỉnh Sửa Blog" : "Thêm Blog Mới"}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          placeholder="Tiêu đề"
-          className="border p-2 rounded"
-        />
-        <input
-          name="slug"
-          value={form.slug}
-          onChange={handleChange}
-          placeholder="Slug (ví dụ: blog-bai-viet-1)"
-          className="border p-2 rounded"
-        />
-        <input
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          placeholder="Mô tả"
-          className="border p-2 rounded"
-        />
-        <input
-          name="author"
-          value={form.author}
-          onChange={handleChange}
-          placeholder="Tác giả"
-          className="border p-2 rounded"
-        />
-
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        >
+        <input name="title" value={form.title} onChange={handleChange} placeholder="Tiêu đề" className="border p-2 rounded" />
+        <input name="slug" value={form.slug} onChange={handleChange} placeholder="Slug (ví dụ: blog-bai-viet-1)" className="border p-2 rounded" />
+        <input name="description" value={form.description} onChange={handleChange} placeholder="Mô tả" className="border p-2 rounded" />
+        <input name="author" value={form.author} onChange={handleChange} placeholder="Tác giả" className="border p-2 rounded" />
+        <select name="category" value={form.category} onChange={handleChange} className="border p-2 rounded">
           <option value="">-- Chọn thể loại --</option>
           {danhSachCategories?.map((cat: any) => (
-            <option key={cat._id} value={cat.name}>
-              {cat.name}
-            </option>
+            <option key={cat._id} value={cat.name}>{cat.name}</option>
           ))}
         </select>
-
         <div className="flex gap-2">
           <input
             type="text"
@@ -185,7 +152,7 @@ export default function QuanLyBlog() {
             </tr>
           </thead>
           <tbody>
-            {danhSachBlog?.map((blog: any) => (
+            {currentBlogs?.map((blog: any) => (
               <tr key={blog._id} onClick={() => handleEdit(blog)} className="cursor-pointer hover:bg-gray-100">
                 <td className="p-2 border">{blog.title}</td>
                 <td className="p-2 border">{blog.author}</td>
@@ -206,6 +173,29 @@ export default function QuanLyBlog() {
           </tbody>
         </table>
       </div>
+
+      {/* Phân trang */}
+      {danhSachBlog && totalPages > 1 && (
+        <div className="mt-4 flex justify-center gap-2">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 border rounded disabled:opacity-50 cursor-pointer"
+          >
+            Trang trước
+          </button>
+          <span className="px-3 py-1">
+            Trang {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 border rounded disabled:opacity-50 cursor-pointer"
+          >
+            Trang sau
+          </button>
+        </div>
+      )}
     </div>
   );
 }

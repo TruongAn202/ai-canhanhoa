@@ -57,7 +57,7 @@ function SignIn() {
         <h2 className="text-2xl">Đăng Nhập AI Cá Nhân Hóa Của Bạn</h2>
 
         {/* click vao hien thi dang nhap bang google */}
-        <Button onClick={() => googleLogin()}>Đăng nhập với google</Button>
+        <Button className="cursor-pointer" onClick={() => googleLogin()}>Đăng nhập với google</Button>
       </div>
     </div>
     </>

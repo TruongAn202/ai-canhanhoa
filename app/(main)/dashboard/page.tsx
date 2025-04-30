@@ -16,13 +16,13 @@ export default function DashboardPage() {
     <div className="flex min-h-screen bg-white text-black">
       <Sidebar tab={tab} setTab={setTab} />
       <main className="flex-1 p-6">
-        <Header />
+        {tab !== "dashboard" && <Header />} 
         {tab === "dashboard" && <DashboardTab />}
         {tab === "payments" && <PaymentsTab />}
         {tab === "accounts" && <AccountsTab />}
         {tab === "support" && <SupportTab />}
-        {tab === "blogs" && <BlogstTab/>}
+        {tab === "blogs" && <BlogstTab />}
       </main>
     </div>
-  );
+  );  
 }

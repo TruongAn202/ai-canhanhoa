@@ -53,11 +53,15 @@ export const UpdateTokens = mutation({ // cap nhat token
 })
 
 export const GetAllUsers = query({
-    handler: async (ctx) => {
-      const users = await ctx.db.query("users").collect();
-      return users;
-    },
-  });
+  handler: async (ctx) => {
+    const users = await ctx.db
+      .query("users")
+      .order("desc") // sắp xếp theo ngày mới nhất
+      .collect();
+    return users;
+  },
+});
+
 
   //phan quyen
   export const UpdateUserRole = mutation({

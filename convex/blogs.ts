@@ -33,7 +33,6 @@ export const GetBlogBySlug = query({
         .query("blog")
         .filter((q) => q.eq(q.field("slug"), args.slug))
         .first();
-  
       return blog;
     },
   });

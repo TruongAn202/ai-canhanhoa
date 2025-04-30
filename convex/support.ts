@@ -25,7 +25,10 @@ export const CreateSupportTicket = mutation({
 
 export const GetAllSupportTickets = query({
   handler: async (ctx) => {
-    const tickets = await ctx.db.query('support').collect(); // Lấy tất cả tickets từ bảng support
+    const tickets = await ctx.db
+      .query('support')
+      .order('desc') // Sắp xếp theo thời gian tạo giảm dần
+      .collect();
     return tickets;
   }
 });

@@ -59,7 +59,7 @@ export default function DashboardTab() {
               </div>
             ))
           ) : (
-            <div className="text-sm text-gray-500">Loading...</div>
+            <div className="text-sm text-gray-500">Đang tải...</div>
           )}
         </div>
       </CardContent>
