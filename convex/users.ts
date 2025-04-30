@@ -97,4 +97,11 @@ export const GetAllUsers = query({
     },
   });
   
+  //tong so tai khoan
+  export const DemTongTaiKhoan = query({
+    handler: async (ctx) => {
+      const users = await ctx.db.query("users").collect();
+      return users.length;
+    },
+  });
   

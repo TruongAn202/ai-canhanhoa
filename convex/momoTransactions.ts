@@ -53,3 +53,46 @@ export const GetAllTransactions = query({
     return enriched.sort((a, b) => b._creationTime - a._creationTime);
   },
 });
+
+export const GetAllTransactionsWithUser = query({
+  args: {},
+  handler: async (ctx) => {
+    const transactions = await ctx.db.query("momoTransactions").collect();
+    const allUsers = await ctx.db.query("users").collect();
+
+    const enriched = transactions.map((tx) => {
+      const user = allUsers.find((u) => u._id === tx.userId);
+      return {
+        ...tx,
+        userName: user?.name || "Không rõ",
+        email: user?.email || "Không rõ",
+        credits: user?.credits ?? 0,
+      };
+    });
+
+    return enriched.sort((a, b) => b._creationTime - a._creationTime);
+  },
+});
+//tong doanh thu
+export const GetTongDoanhThu = query({
+  args: {},
+  handler: async (ctx) => {
+    const transactions = await ctx.db.query("momoTransactions").collect();
+
+    // Chỉ tính những giao dịch có status là "success" (nếu bạn có trạng thái như vậy)
+    const totalRevenue = transactions
+      .filter((tx) => tx.status === "success")
+      .reduce((sum, tx) => sum + tx.amount, 0);
+
+    return totalRevenue;
+  },
+});
+//tong don hang
+export const DemTongDonHangThanhCong = query({
+  args: {},
+  handler: async (ctx) => {
+    const transactions = await ctx.db.query("momoTransactions").collect();
+    const thanhCong = transactions.filter((tx) => tx.status === "success");
+    return thanhCong.length;
+  },
+});

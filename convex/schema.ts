@@ -43,4 +43,7 @@ export default defineSchema({ //chua bang
         status: v.string(),  // Trạng thái giao dịch
         paymentMethod: v.string(),  // Phương thức thanh toán (Momo)
     }),
+    blogCategories: defineTable({
+        name: v.string(), // tên thể loại
+      }),
 })

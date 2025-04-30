@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as blogCategories from "../blogCategories.js";
 import type * as blogs from "../blogs.js";
 import type * as momoTransactions from "../momoTransactions.js";
 import type * as support from "../support.js";
@@ -28,6 +29,7 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  blogCategories: typeof blogCategories;
   blogs: typeof blogs;
   momoTransactions: typeof momoTransactions;
   support: typeof support;
