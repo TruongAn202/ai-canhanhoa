@@ -1,8 +1,21 @@
 "use client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Search } from "lucide-react"; // 👉 dùng icon
+import { Search } from "lucide-react";
 
-export default function Header() {
+type HeaderProps = {
+  tab: string;
+};
+
+const placeholderMap: Record<string, string> = {
+  support: "Tìm theo email...",
+  payments: "Tìm theo mã giao dịch...",
+  blogs: "Tìm theo tiêu đề bài viết...",
+  accounts: "Tìm theo email người dùng...",
+};
+
+export default function Header({ tab }: HeaderProps) {
+  const placeholder = placeholderMap[tab] || "Tìm kiếm...";
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,7 +38,7 @@ export default function Header() {
         <Search className="w-4 h-4 text-gray-500" />
         <input
           type="text"
-          placeholder="Tìm theo email..."
+          placeholder={placeholder}
           className="flex-1 bg-transparent text-black outline-none"
           value={currentQuery}
           onChange={handleChange}

@@ -3,16 +3,19 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+
+const ITEMS_PER_PAGE = 5;
 
 export default function QuanLyBlog() {
-  const themBlog = useMutation(api.blogs.ThemBlog);
-  const xoaBlog = useMutation(api.blogs.XoaBlog);
-  const themCategory = useMutation(api.blogs.ThemCategory);
-  const danhSachCategories = useQuery(api.blogCategories.GetAllCategories);
-  const danhSachBlog = useQuery(api.blogs.GetTatCaBlog);
-  const capNhatBlog = useMutation(api.blogs.CapNhatBlog);
-
-  const [form, setForm] = useState({
+  const themBlog = useMutation(api.blogs.ThemBlog); // Hàm thêm blog mới thông qua mutation
+  const xoaBlog = useMutation(api.blogs.XoaBlog); // Hàm xóa blog thông qua mutation
+  const themCategory = useMutation(api.blogs.ThemCategory); // Hàm thêm thể loại blog mới thông qua mutation
+  const danhSachCategories = useQuery(api.blogCategories.GetAllCategories); // Lấy danh sách tất cả thể loại blog từ API
+  const danhSachBlog = useQuery(api.blogs.GetTatCaBlog); // Lấy danh sách tất cả bài blog từ API
+  const capNhatBlog = useMutation(api.blogs.CapNhatBlog); // Hàm cập nhật thông tin blog thông qua mutation
+  
+  const [form, setForm] = useState({ // Quản lý trạng thái form cho các trường blog
     title: "",
     description: "",
     author: "",
@@ -20,43 +23,49 @@ export default function QuanLyBlog() {
     slug: "",
     content: "",
   });
-
-  const [newCategory, setNewCategory] = useState("");
-  const [editing, setEditing] = useState(false);
-  const [currentBlogId, setCurrentBlogId] = useState<Id<"blog"> | null>(null);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 5;
-
-  const indexOfLastBlog = currentPage * blogsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = danhSachBlog?.slice(indexOfFirstBlog, indexOfLastBlog);
-  const totalPages = danhSachBlog ? Math.ceil(danhSachBlog.length / blogsPerPage) : 1;
-
-  const handleChange = (e: any) => {
+  
+  const [newCategory, setNewCategory] = useState(""); // Quản lý trạng thái thể loại blog mới
+  const [editing, setEditing] = useState(false); // Trạng thái chỉnh sửa blog hay không
+  const [currentBlogId, setCurrentBlogId] = useState<Id<"blog"> | null>(null); // ID của blog hiện tại đang chỉnh sửa
+  const [currentPage, setCurrentPage] = useState(1); // Quản lý trang hiện tại cho phân trang
+  const searchParams = useSearchParams(); // Lấy đối tượng searchParams từ URL
+  const searchQuery = searchParams.get("q")?.toLowerCase() || ""; // Lấy giá trị query 'q' từ URL và chuyển sang chữ thường
+  
+  // Lọc danh sách blog theo tiêu đề hoặc slug, không phân biệt hoa thường
+  const filteredBlogs = danhSachBlog?.filter((blog) =>
+    blog.title.toLowerCase().includes(searchQuery) || blog.slug.toLowerCase().includes(searchQuery) // Kiểm tra xem tiêu đề hoặc slug có chứa chuỗi tìm kiếm không
+  );
+  
+  const totalPages = filteredBlogs ? Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE) : 1; // Tính tổng số trang dựa trên số lượng blog đã lọc và số bài mỗi trang
+  
+  const indexOfLastBlog = currentPage * ITEMS_PER_PAGE; // Chỉ mục của blog cuối cùng trong trang hiện tại
+  const indexOfFirstBlog = indexOfLastBlog - ITEMS_PER_PAGE; // Chỉ mục của blog đầu tiên trong trang hiện tại
+  const currentBlogs = filteredBlogs?.slice(indexOfFirstBlog, indexOfLastBlog); // Lấy danh sách các blog cho trang hiện tại
+  
+  const handleChange = (e: any) => { // Hàm xử lý sự kiện thay đổi trong form
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value })); // Cập nhật trạng thái form
   };
-
-  const handleSubmit = async () => {
-    if (!form.title || !form.slug || !form.content) {
+  
+  const handleSubmit = async () => { // Hàm xử lý khi người dùng gửi form
+    if (!form.title || !form.slug || !form.content) { // Kiểm tra trường bắt buộc
       alert("Vui lòng nhập đầy đủ tiêu đề, slug và nội dung blog!");
       return;
     }
-
-    if (editing && currentBlogId) {
+  
+    if (editing && currentBlogId) { // Nếu đang chỉnh sửa, cập nhật blog
       await capNhatBlog({
         id: currentBlogId,
         ...form,
       });
-    } else {
+    } else { // Nếu không phải chỉnh sửa, thêm blog mới
       await themBlog({
         ...form,
         date: new Date().toISOString(),
       });
     }
-
-    setForm({
+  
+    setForm({ // Reset lại form
       title: "",
       description: "",
       author: "",
@@ -64,26 +73,26 @@ export default function QuanLyBlog() {
       slug: "",
       content: "",
     });
-    setEditing(false);
-    setCurrentBlogId(null);
+    setEditing(false); // Chế độ chỉnh sửa tắt
+    setCurrentBlogId(null); // Xóa ID của blog đang chỉnh sửa
   };
-
-  const handleAddCategory = async () => {
-    if (newCategory.trim()) {
-      await themCategory({ category: newCategory.trim() });
-      setNewCategory("");
+  
+  const handleAddCategory = async () => { // Hàm thêm thể loại mới
+    if (newCategory.trim()) { // Nếu thể loại không rỗng
+      await themCategory({ category: newCategory.trim() }); // Gọi API thêm thể loại
+      setNewCategory(""); // Reset giá trị thể loại mới
     }
   };
-
-  const handleDelete = async (id: Id<"blog">) => {
-    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?");
-    if (confirmDelete) {
-      await xoaBlog({ id });
+  
+  const handleDelete = async (id: Id<"blog">) => { // Hàm xử lý xóa blog
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?"); // Hiển thị hộp thoại xác nhận
+    if (confirmDelete) { // Nếu xác nhận
+      await xoaBlog({ id }); // Gọi API xóa blog
     }
   };
-
-  const handleEdit = (blog: any) => {
-    setForm({
+  
+  const handleEdit = (blog: any) => { // Hàm xử lý khi chỉnh sửa blog
+    setForm({ // Cập nhật lại form với dữ liệu của blog đang chỉnh sửa
       title: blog.title,
       description: blog.description,
       author: blog.author,
@@ -91,10 +100,10 @@ export default function QuanLyBlog() {
       slug: blog.slug,
       content: blog.content,
     });
-    setEditing(true);
-    setCurrentBlogId(blog._id);
+    setEditing(true); // Chế độ chỉnh sửa bật
+    setCurrentBlogId(blog._id); // Lưu ID của blog đang chỉnh sửa
   };
-
+  
   return (
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold">{editing ? "Chỉnh Sửa Blog" : "Thêm Blog Mới"}</h2>

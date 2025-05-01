@@ -2,19 +2,29 @@
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const ITEMS_PER_PAGE = 5;
 
 export default function PaymentsTab() {
-  const transactions = useQuery(api.momoTransactions.GetAllTransactions);
-  const [currentPage, setCurrentPage] = useState(1);
+  const transactions = useQuery(api.momoTransactions.GetAllTransactions); // Lấy danh sách tất cả giao dịch từ API MoMo
+  const searchParams = useSearchParams(); // Lấy đối tượng searchParams từ URL
+  const searchQuery = searchParams.get("q")?.toLowerCase() || ""; // Lấy giá trị query 'q' từ URL, chuyển sang chữ thường, mặc định là chuỗi rỗng
 
-  const totalPages = transactions ? Math.ceil(transactions.length / ITEMS_PER_PAGE) : 1;
+  const [currentPage, setCurrentPage] = useState(1); // Quản lý trang hiện tại cho phân trang
 
-  const paginatedTransactions = transactions?.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+  // Lọc giao dịch theo _id, tìm kiếm không phân biệt hoa thường
+  const filteredTransactions = transactions?.filter((tx) =>
+    tx._id.toLowerCase().includes(searchQuery) // Kiểm tra _id của giao dịch có chứa chuỗi tìm kiếm không
   );
+
+  const totalPages = filteredTransactions ? Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE) : 1; // Tính tổng số trang dựa trên số lượng giao dịch đã lọc và số giao dịch mỗi trang
+
+  const paginatedTransactions = filteredTransactions?.slice( // Cắt danh sách giao dịch theo phân trang
+    (currentPage - 1) * ITEMS_PER_PAGE, // Chỉ mục bắt đầu
+    currentPage * ITEMS_PER_PAGE // Chỉ mục kết thúc
+  );
+
 
   return (
     <div>
@@ -72,7 +82,7 @@ export default function PaymentsTab() {
       </div>
 
       {/* Phân trang */}
-      {transactions && totalPages > 1 && (
+      {filteredTransactions && totalPages > 1 && (
         <div className="mt-4 flex justify-center gap-2">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

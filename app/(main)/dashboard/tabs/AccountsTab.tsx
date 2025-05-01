@@ -4,60 +4,71 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation"; // Để lấy query params từ URL
 
 export default function AccountsTab() {
-  const users = useQuery(api.users.GetAllUsers);
-  const updateUserRole = useMutation(api.users.UpdateUserRole);
-  const deleteUser = useMutation(api.users.DeleteUser);
-
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 5; // số dòng mỗi trang
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-  const totalPages = Math.ceil((users?.length || 0) / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const paginatedUsers = users?.slice(startIndex, startIndex + rowsPerPage);
-
+  const users = useQuery(api.users.GetAllUsers); // Lấy danh sách người dùng từ API
+  const updateUserRole = useMutation(api.users.UpdateUserRole); // Hàm cập nhật vai trò người dùng
+  const deleteUser = useMutation(api.users.DeleteUser); // Hàm xóa người dùng
+  
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null); // Quản lý trạng thái dropdown (mở hoặc đóng)
+  const [currentPage, setCurrentPage] = useState(1); // Quản lý trang hiện tại cho phân trang
+  const rowsPerPage = 5; // Số dòng hiển thị trên mỗi trang
+  const dropdownRef = useRef<HTMLDivElement | null>(null); // Tham chiếu đến dropdown để kiểm tra khi click bên ngoài
+  
+  const searchParams = useSearchParams(); // Lấy đối tượng searchParams từ URL
+  const searchQuery = searchParams.get("q") || ""; // Lấy giá trị query 'q' từ URL, nếu không có thì mặc định là chuỗi rỗng
+  
+  const totalPages = Math.ceil((users?.length || 0) / rowsPerPage); // Tính tổng số trang dựa trên số lượng người dùng và số dòng mỗi trang
+  const startIndex = (currentPage - 1) * rowsPerPage; // Tính chỉ mục bắt đầu cho việc phân trang
+  const filteredUsers = users
+    ?.filter((user) =>  
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) // Lọc người dùng theo email, tìm kiếm không phân biệt hoa thường
+    );
+  
+  const paginatedUsers = filteredUsers?.slice(startIndex, startIndex + rowsPerPage); // Cắt danh sách người dùng theo phân trang
+  
   useEffect(() => {
+    // Hàm xử lý click bên ngoài dropdown để đóng nó
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(event.target as Node) // Kiểm tra nếu click ngoài dropdown
       ) {
-        setOpenDropdown(null);
+        setOpenDropdown(null); // Đóng dropdown nếu click bên ngoài
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
+  
+    document.addEventListener("mousedown", handleClickOutside); // Thêm sự kiện lắng nghe click ngoài
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside); // Xóa sự kiện khi component unmount
     };
-  }, []);
-
+  }, []); // Hook này chạy một lần khi component được mount
+  
   const handleRoleChange = async (userId: Id<"users">, role: string, currentRole: string) => {
-    if (currentRole === role) {
+    if (currentRole === role) { // Nếu người dùng đã có vai trò như yêu cầu thì không làm gì
       alert(`Tài khoản này đã là ${role === "admin" ? "admin" : "user"}.`);
       return;
     }
     try {
-      await updateUserRole({ userId, role });
-      alert(`Đã phân quyền thành công: ${role}`);
+      await updateUserRole({ userId, role }); // Cập nhật vai trò người dùng
+      alert(`Đã phân quyền thành công: ${role}`); // Thông báo thành công
     } catch (error) {
-      alert("Phân quyền thất bại");
+      alert("Phân quyền thất bại"); // Thông báo lỗi nếu phân quyền thất bại
     }
   };
-
+  
   const handleDeleteUser = async (userId: Id<"users">) => {
-    if (confirm("Bạn có chắc chắn muốn xóa tài khoản này?")) {
+    if (confirm("Bạn có chắc chắn muốn xóa tài khoản này?")) { // Cảnh báo xác nhận xóa tài khoản
       try {
-        await deleteUser({ userId });
-        alert("Đã xóa tài khoản thành công");
+        await deleteUser({ userId }); // Xóa người dùng
+        alert("Đã xóa tài khoản thành công"); // Thông báo thành công
       } catch (error) {
-        alert("Xóa tài khoản thất bại");
+        alert("Xóa tài khoản thất bại"); // Thông báo lỗi nếu xóa thất bại
       }
     }
   };
+  
 
   return (
     <div>

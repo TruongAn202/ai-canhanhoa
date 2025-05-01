@@ -16,7 +16,8 @@ export default function DashboardPage() {
     <div className="flex min-h-screen bg-white text-black">
       <Sidebar tab={tab} setTab={setTab} />
       <main className="flex-1 p-6">
-        {tab !== "dashboard" && <Header />} 
+        {/* Dùng  "{tab !== "dashboard" && <Header tab={tab} />}"cái này để cho chuuc nang hien thi place hoder khung search */}
+        {tab !== "dashboard" && <Header tab={tab} />}
         {tab === "dashboard" && <DashboardTab />}
         {tab === "payments" && <PaymentsTab />}
         {tab === "accounts" && <AccountsTab />}
