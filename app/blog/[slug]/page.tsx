@@ -27,7 +27,7 @@ export default async function BlogDetailPage({ params }: { params: { slug: strin
         </div>
 
         {/* Nội dung blog */}
-        <div className="prose prose-lg max-w-none mx-auto mb-15 min-h-[200px]">
+        <div className="prose prose-lg max-w-none mx-auto mb-15 min-h-[250px]">
           <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         </div>
 

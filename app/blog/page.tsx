@@ -32,7 +32,7 @@ export default function Blog() {
               ).map((post, index) => (
                 <div
                   key={post?._id ?? index}
-                  className={`border rounded-2xl p-5 shadow hover:shadow-lg transition min-h-[160px] ${!post ? "mb-[200px]" : ""}`} // Chỉ thêm mb-[200px] khi loading
+                  className={`border rounded-2xl p-5 shadow hover:shadow-lg transition min-h-[160px] ${!post ? "mb-[250px]" : ""}`} // Chỉ thêm mb-[200px] khi loading
                 >
                   {!post ? (
                     <div className="animate-pulse space-y-4">
