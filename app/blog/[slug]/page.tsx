@@ -1,3 +1,6 @@
+// app/blog/[slug]/page.tsx
+export const dynamicParams = true;
+
 import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
 import { notFound } from "next/navigation";
@@ -5,7 +8,6 @@ import { notFound } from "next/navigation";
 import Header from '@/app/(main)/_components/HeaderHome';
 import Footer from "@/components/footer/Footer";
 
-// ✅ Khai báo rõ ràng kiểu props
 type PageProps = {
   params: {
     slug: string;
