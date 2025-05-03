@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
     const orderId = partnerCode + new Date().getTime();
     const requestId = orderId;
     const orderInfo = 'Nâng cấp tài khoản gói cao cấp';
-    const redirectUrl = 'http://localhost:3000/workspace';
+    //const redirectUrl = 'http://localhost:3000/workspace';
+    const redirectUrl = 'https://ai-canhanhoa-tr-an202.vercel.app/workspace';
     //const ipnUrl = 'https://27e5-171-232-66-106.ngrok-free.app/api/momo/ipn';
     const ipnUrl = 'https://ai-canhanhoa-tr-an202.vercel.app/api/momo/ipn';
     
