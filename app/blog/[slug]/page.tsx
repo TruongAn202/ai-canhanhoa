@@ -8,13 +8,11 @@ import { notFound } from "next/navigation";
 import Header from '@/app/(main)/_components/HeaderHome';
 import Footer from "@/components/footer/Footer";
 
-type PageProps = {
-  params: {
-    slug: string;
-  };
-};
-
-export default async function BlogDetailPage({ params }: PageProps) {
+export default async function BlogDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const blog = await fetchQuery(api.blogs.GetBlogBySlug, { slug: params.slug });
 
   if (!blog) return notFound();
