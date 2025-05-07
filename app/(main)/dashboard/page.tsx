@@ -11,7 +11,7 @@ import BlogstTab from "./tabs/QuanLyBlog"
 
 export default function DashboardPage() {
   const [tab, setTab] = useState("dashboard");
-
+  //chuyen tab
   return (
     <div className="flex min-h-screen bg-white text-black">
       <Sidebar tab={tab} setTab={setTab} />

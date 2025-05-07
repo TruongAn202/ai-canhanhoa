@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import Header from "./(main)/_components/HeaderHome";
 import Footer from "@/components/footer/Footer";
 import Link from "next/link";
-
+//trang chu
 export default function Home() {
   const sections = [
     {
@@ -63,11 +63,15 @@ export default function Home() {
       {sections.map((section, index) => (
         <motion.section
           key={index}
+          //Giúp tạo cảm giác thay đổi hướng hiển thị giữa các section (ảnh trái , phải xen kẽ)
           className={`h-screen flex items-center justify-center px-10 lg:px-32 ${section.reverse ? "flex-row-reverse" : "flex-row"
             }`}
+            //bắt đầu mờ và lệch xuống
           initial={{ opacity: 0, y: 50 }}
+          //khi cuộn đến, hiện ra từ từ
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
+          //tốc độ mượt
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           {/* Ảnh */}

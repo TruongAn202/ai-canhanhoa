@@ -24,68 +24,76 @@ import { LogOut, UserCircle2 } from 'lucide-react';
 import ProFile from './ProFile';
 import { googleLogout } from '@react-oauth/google';
 import { useRouter } from 'next/navigation';
-
-
+//ben trai
 function CaNhanHoaList() {
-  const { user, setUser } = useContext(XacThucContext);
+  const { user, setUser } = useContext(XacThucContext); // Thông tin user
   const convex = useConvex();
 
-  const [caNhanHoaList, setCaNhanHoaList] = useState<CANHANHOA[]>([]); // de set du lieu = result, nho la 1 danh sach
-  const { canhanhoa, setCaNhanHoa } = useContext(CaNhanHoaContext);
+  const [caNhanHoaList, setCaNhanHoaList] = useState<CANHANHOA[]>([]); // Danh sách AI cá nhân hóa
+  const { canhanhoa, setCaNhanHoa } = useContext(CaNhanHoaContext);//useContext(...)là hook của React để truy cập dữ liệu từ một context đã được tạo sẵn,là nơi chứa trạng thái toàn cục của AI đang được chọn và hàm để cập nhật nó.
 
-  const [openProfile, setOpenProfile]=useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // Từ khóa tìm kiếm
 
   const router = useRouter();
+
   useEffect(() => {
     user && GetUserCaNhanHoa();
   }, [user && canhanhoa == null]);//cap nhat ngay danh sach cac AI còn lại sau khi xoa
-  // Hàm này lấy danh sách người dùng cá nhân hóa từ Convex
-  const GetUserCaNhanHoa = async () => {
+
+  const GetUserCaNhanHoa = async () => {// lấy danh sách người dùng cá nhân hóa từ Convex
     const result = await convex.query(api.userAiCaNhanHoa.GetAllUserCaNhanHoa, {
-      uid: user._id, // Truy vấn dữ liệu dựa trên ID người dùng
+      uid: user._id,//Truy vấn dữ liệu dựa trên ID người dùng
     });
-    console.log(result);
     setCaNhanHoaList(result);
   };
-    // Hàm đăng xuất
-    const handleLogout = () => {
-      googleLogout(); // Xóa session Google
-      setUser(null); // Xóa context user
-    
-      localStorage.clear();
-      sessionStorage.clear();
-    
-      // Xóa cookie (nếu có)
-      document.cookie.split(";").forEach((c) => {
-        document.cookie = c
-          .replace(/^ +/, "")
-          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-      });
-    
-      setTimeout(() => {
-        router.push("/sign-in");
-      }, 100); // Delay nhỏ để đảm bảo state được reset
-    };
-    
+  //dang xuat
+  const handleLogout = () => {
+    googleLogout();
+    setUser(null);
+    localStorage.clear();
+    sessionStorage.clear();
+    // Xóa cookie (nếu có)
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+    setTimeout(() => {
+      router.push("/sign-in");
+    }, 100);// Delay nhỏ để đảm bảo state được reset
+  };
+  //danh sách sau khi lọc
+  const filteredList = caNhanHoaList.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className='p-5 bg-secondary border-r-[1px] h-screen relative'>
       <h2 className='font-bold text-lg'>Danh Sách AI Của Bạn</h2>
       <ThemMoiCaNhanHoa>
+        {/* Đã được setup (component), để mở cửa sổ thêm AI moi */}
         <Button className='w-full mt-3 cursor-pointer'>+ Thêm AI Mới</Button>
       </ThemMoiCaNhanHoa>
-      <Input className='bg-white mt-3' placeholder='Tìm kiếm' />
+      
+      <Input
+      //tìm kiếm, gia tri ng dung nhap vao khung tim kiem, luu vao searchTerm
+        className='bg-white mt-3'
+        placeholder='Tìm kiếm'
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
       <div className='mt-5'>
-        {/* dung canhanhoaList de hien thi nhung ai da chon chu khong  phai AiCaNhanHoaList la list AI All*/}
-        {caNhanHoaList.map((canhanhoa_, index) => (
+        {filteredList.map((canhanhoa_, index) => (
+          //duyệt trên danh sach da loc boi timm kiem
           <BlurFade key={canhanhoa_.image} delay={0.25 + index * 0.05} inView>
-            {/* cho chữ va ảnh nằm trên 1 dòng gap-3 items-center */}
             <div className={`p-2 mt-2 flex gap-3 items-center hover:bg-gray-200 hover:dark:bg-slate-700 rounded-xl cursor-pointer
-                  ${canhanhoa_.id == canhanhoa?.id && 'bg-gray-200'} 
-                `}
-              //  ${canhanhoa_.id==canhanhoa?.id&&'bg-gray-200' nghia la khi 1 AI được chọn, background sẽ thành màu xám
-              key={index} onClick={() => setCaNhanHoa(canhanhoa_)}>
-              {/* image cua nextjs */}
-              <Image src={canhanhoa_.image} alt={canhanhoa_.name}
+              ${canhanhoa_.id == canhanhoa?.id && 'bg-gray-200'}`}//click vào 1 AI trong danh sách, nó sẽ được chọn (cập nhật vào canhanhoa)  thẻ AI đó sẽ đổi nền thành xám để highlight rằng nó đang được chọn.
+              onClick={() => setCaNhanHoa(canhanhoa_)}>
+              <Image
+                src={canhanhoa_.image}
+                alt={canhanhoa_.name}
                 width={60}
                 height={60}
                 className='rounded-xl w-[60px] h-[60px] object-cover'
@@ -101,26 +109,34 @@ function CaNhanHoaList() {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
+          {/* click vào đây thì xổ ra dropdow */}
           <div className='absolute bottom-10 flex gap-3 items-center hover:bg-gray-200 w-[90%] p-2 rounded-xl cursor-pointer'>
-          {/* tranh loi user?.picture co chuoi rong thi nextjs hien canh bao */}
-          {user?.picture ? (<Image src={user.picture} alt="user" width={35} height={35} className='rounded-full' />) : null}
-          <div>
-            <h2 className='font-bold'>{user?.name}</h2>
-            <h2 className='text-sm text-gray-400'>{user?.orderId ? 'VIP' : 'Miễn Phí'}</h2>
+            {user?.picture ? (
+              <Image src={user.picture} alt="user" width={35} height={35} className='rounded-full' />
+            ) : null}
+            <div>
+              <h2 className='font-bold'>{user?.name}</h2>
+              <h2 className='text-sm text-gray-400'>{user?.orderId ? 'VIP' : 'Miễn Phí'}</h2>
+            </div>
           </div>
-        </div>
         </DropdownMenuTrigger>
+        {/* Day la dropdow se xổ ra */}
         <DropdownMenuContent>
           <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className='cursor-pointer' onClick={()=>setOpenProfile(true)}><UserCircle2/> Thông tin</DropdownMenuItem>
-          <DropdownMenuItem className='cursor-pointer' onClick={handleLogout}><LogOut/> Đăng xuất</DropdownMenuItem>
+          {/* click vao set cai nay thành true */}
+          <DropdownMenuItem className='cursor-pointer' onClick={() => setOpenProfile(true)}>
+            <UserCircle2 /> Thông tin
+          </DropdownMenuItem>
+          <DropdownMenuItem className='cursor-pointer' onClick={handleLogout}>
+            <LogOut /> Đăng xuất
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {/* setOpenDialog={setOpenProfile} để nút X thoát hoạt động */}
-        <ProFile openDialog={openProfile} setOpenDialog={setOpenProfile}/>
+          {/* Mở profile khi  la true */}
+      <ProFile openDialog={openProfile} setOpenDialog={setOpenProfile} />
     </div>
   )
 }
 
-export default CaNhanHoaList
+export default CaNhanHoaList;

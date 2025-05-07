@@ -13,16 +13,16 @@ function Provider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const router = useRouter();
+  const router = useRouter();//dung router de chuye huong
   const convex = useConvex(); //khai bao convex de lay du lieu
   const { user, setUser } = useContext(XacThucContext);
   const [canhanhoa,setCaNhanHoa]=useState(); //khai bao cai nay dung ở CaNhanHoaContext.Provider value={{}}
   useEffect(() => {
     KiemTraXacThucUser();
-  }, []);
+  }, []);//chay 1 lần ,lần đầu tiên xuất hiện trên giao diện
   const KiemTraXacThucUser = async () => {
     const token = localStorage.getItem("user_token"); //lay token luu trong local stroage
-    const user = token && (await GetAuthUserData(token));
+    const user = token && (await GetAuthUserData(token));//token cua google auth
     if (!user?.email) {
       //neu chua dang nhap chuyen qua trang sign-in
       router.replace("/sign-in");
@@ -40,6 +40,7 @@ function Provider({
   };
   return (
     <div>
+      {/* cung cấp dữ liệu (value) xuống tất cả các component con nằm bên trong. */}
       <CaNhanHoaContext.Provider value={{canhanhoa,setCaNhanHoa}}>
         <Header />
         {children}

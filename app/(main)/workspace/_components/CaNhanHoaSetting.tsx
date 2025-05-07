@@ -21,7 +21,7 @@ import { format } from "date-fns"; //cai thu vien de format ngay thang nam
 import { vi } from "date-fns/locale"; // Import locale tiếng Việt
 import ConfirmationAlert from "../ConfirmationAlert";
 import { BlurFade } from "@/components/magicui/blur-fade";
-
+//ben phai
 function CaNhanHoaSetting() {
   //khai bao ngay thang nam theo formart
   const now = new Date();
@@ -33,7 +33,7 @@ function CaNhanHoaSetting() {
   const [loading, setLoading] = useState(false);
   const onHandleInputChange = (field: string, value: string) => { //bat cu tahy doi nao ở instruction(nguoi dùng thay đổi) thì test area cua ai do cung thay doi
     setCaNhanHoa((prev: any) => ({
-      ...prev, [field]: value
+      ...prev, [field]: value //thay doi field nao va vallue nao
     }))
   }
   const OnSave = async () => { //nut luu, phai chon 1 model ai truoc khi them userinstruction, ko la se loi
@@ -49,7 +49,7 @@ function CaNhanHoaSetting() {
     });
     setLoading(false);
   }
-  const OnDelete = async () => {
+  const OnDelete = async () => {//xoa mot AI theo ID
     console.log('OnDelete');
     setLoading(true)
     await XoaCaNhanHoa({
@@ -89,6 +89,7 @@ function CaNhanHoaSetting() {
               </SelectTrigger>
               <SelectContent>
                 {AiModeOption.map((model, index) => (
+                  //thay doi aimodelId dua tren select item
                   <SelectItem key={index} value={model.name}>
                     <div className="flex gap-2 items-center m-1">
                       <Image src={model.logo} alt={model.name} width={20} height={20}

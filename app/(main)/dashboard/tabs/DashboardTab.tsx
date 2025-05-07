@@ -5,15 +5,15 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 export default function DashboardTab() {
-  const transactions = useQuery(api.momoTransactions.GetAllTransactionsWithUser);
-  const tongDoanhThu = useQuery(api.momoTransactions.GetTongDoanhThu);
-  const tongDonThanhCong = useQuery(api.momoTransactions.DemTongDonHangThanhCong);
+  const transactions = useQuery(api.momoTransactions.GetAllTransactionsWithUser);//lay danh sach all giao dich
+  const tongDoanhThu = useQuery(api.momoTransactions.GetTongDoanhThu);//tong doan hthu
+  const tongDonThanhCong = useQuery(api.momoTransactions.DemTongDonHangThanhCong);//dem so luong don hang giao dich thanh cong
   const tongTaiKhoan = useQuery(api.users.DemTongTaiKhoan);
 
   return (
     <>
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-
+      {/* 3 card chinh */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {[
           { label: "Tổng doanh thu", value: tongDoanhThu !== undefined ? `${tongDoanhThu.toLocaleString()} VNĐ` : "Đang tải..." },

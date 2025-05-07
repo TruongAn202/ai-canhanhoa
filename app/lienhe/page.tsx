@@ -8,15 +8,15 @@ import Footer from "@/components/footer/Footer";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");//mail
+  const [message, setMessage] = useState("");//tin nhan 
+  const [loading, setLoading] = useState(false);//trang thai loading
   const [error, setError] = useState("");
   const [charCount, setCharCount] = useState(0); // Đếm số ký tự trong tin nhắn
 
   const createSupportTicket = useMutation(api.support.CreateSupportTicket);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {//,xu ly gui form,kiem tra ko qua 4000 ky tu, thong bao khi gui thanh cong
     e.preventDefault();
     if (message.length > 4000) {
       setError("Tin nhắn không được vượt quá 4000 ký tự!");
@@ -40,9 +40,9 @@ export default function ContactPage() {
     }
   };
 
-  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {//hien thi kiem tra cac ky tu dang go hien tai va 4000 kky tu, khong cho phap vuot qua
     const newMessage = e.target.value;
-    if (newMessage.length <= 4000) {
+    if (newMessage.length <= 4000) {//xu ly thay doi tin nhan, dem ky tu
       setMessage(newMessage);
       setCharCount(newMessage.length);
     }

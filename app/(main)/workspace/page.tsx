@@ -2,7 +2,7 @@ import React from 'react'
 import CaNhanHoaList from './_components/CaNhanHoaList'
 import CaNhanHoaSetting from './_components/CaNhanHoaSetting'
 import ChatUi from './_components/ChatUi'
-
+//layout hien thi trang workspace
 function Workspace() {
   return (
     <div className='h-screen fixed w-full '>

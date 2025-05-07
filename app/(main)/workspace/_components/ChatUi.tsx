@@ -13,7 +13,7 @@ import { api } from '@/convex/_generated/api';
 import { XacThucContext } from '@/context/XacThucContext';
 import { UpdateTokens } from '@/convex/users';
 import { CANHANHOA } from '../../ai-canhanhoa/page';
-
+//chat o giua
 type MESSAGE = { //khai bao kieu du lieu neu ko setMessages sẽ bi loi
   role: string, //xac dinh role nay cua ai hoac user
   content: string
@@ -32,21 +32,21 @@ function ChatUi() {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight //đoạn chat quá dài, chat tiếp sẽ tự cuộn xuống chat mới chất
     }
-  }, [messages])
+  }, [messages])//chay khi message thay doi
 
   useEffect(() => { // clear lich su chat khi nguoi dung chọn AI khác
     setMessages([]);
-  }, [canhanhoa?.id])
+  }, [canhanhoa?.id])//chay khi id cua ai thay doi
 
   const onSendMessage = async () => {
     setLoading(true) // hien thi trang thai dang xu ly
-    setMessages(prev => [...prev,
+    setMessages(prev => [...prev,//prev => [...]là giá trị hiện tại của messages, và trả về một mảng mới đã được cập nhật....prev: Giữ lại tất cả tin nhắn cũ.
     {
-      role: 'user',
+      role: 'user',//them tin nhan moi tu inout ng dung
       content: input
     },
     {
-      role: 'canhanhoa',
+      role: 'canhanhoa',//he thong dang xu ly
       content: 'Xin chờ...'
     }
     ])
@@ -54,11 +54,11 @@ function ChatUi() {
     setInput(''); // cleaer input
     //Gửi request đến API để gọi AI trả lời
     const AiModel = AiModeOption.find(item => item.name == canhanhoa.aiModelId);
-    const fullPrompt = `${canhanhoa?.instruction}\n${canhanhoa?.userInstruction}\n${userInput}`;
-    const result = await axios.post('/api/eden-ai-model', {
+    const fullPrompt = `${canhanhoa?.instruction}\n${canhanhoa?.userInstruction}\n${userInput}`;//lay ca 3 chi dan ban dau, chi den user, va input
+    const result = await axios.post('/api/eden-ai-model', {//gui den eden ai
       provider: AiModel?.edenAI,
       userInput: fullPrompt,
-      aiResp: messages[messages?.length - 1]?.content
+      aiResp: messages[messages?.length - 1]?.content //lay do dai tru 1, message index nay la phan hoi cua AI
     });
     setLoading(false); //dung load
     setMessages(prev => prev.slice(0, -1)) // xóa dòng xin chờ của ai(cắt mảng messages bỏ phần tử cuối cùng) prev là messages trước đó.
@@ -77,7 +77,7 @@ function ChatUi() {
     });
     setUser((prev: CANHANHOA) => ({//State của user được cập nhật ngay lập tức thành { ...prev, credits: 90 }.
       ...prev,
-      credits: user?.credits - tokenCount,
+      credits: user?.credits - tokenCount,//Dù chưa có phản hồi từ server, cập nhật credits trong local state để giao diện phản hồi tức thì.
     }));
     console.log(result);
   }
@@ -85,9 +85,12 @@ function ChatUi() {
   return (
     canhanhoa ? (
       <div className='mt-20 p-7 relative h-[88vh]'>
+        {/* Neu ko co tin nhan nao, hien thi cac goi da setup sẵn */}
         {messages?.length == 0 && <TrangThaiChatTrong />}
+        {/* cuon chat khi qua dai */}
         <div className='h-[73vh] overflow-scroll scrollbar-hidden' ref={chatRef}>
           {messages.map((msg, index) => (
+            //neu role la user thi ben phai, ai thi ben trai
             <div key={index} className={`flex mb-2 ${msg.role == 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className='flex gap-3'>
                 {msg.role == 'canhanhoa' && (
@@ -97,6 +100,7 @@ function ChatUi() {
                     className='w-[30px] h-[30px] rounded-full object-cover'
                   />
                 )}
+                {/* loadding = true thi ad dang tra loi, hien thi icon loading, msg.content hien thi noi dung tin nhan */}
                 <div className={`p-3 rounded-lg flex gap-2 ${msg.role == 'user' ? "bg-gray-200 text-black" : "bg-gray-50 text-black"}`}>
                   {loading && messages?.length - 1 == index && <Loader2Icon className='animate-spin' />}
                   <h2>{msg.content}</h2>
@@ -107,11 +111,13 @@ function ChatUi() {
         </div>
         <div className='flex justify-between p-5 gap-5 absolute bottom-5 w-[94%]'>
           <Input placeholder='Bắt đầu chat...'
+          //khung input chat cua ng dung
             value={input}
             disabled={loading || user?.credits <= 0}
             onChange={(event) => setInput(event.target.value)}
             onKeyPress={(e) => e.key == 'Enter' && onSendMessage()}
           />
+          {/* neu dang loading hoac toekn la 0 thi tat button nay */}
           <Button disabled={loading || user?.credits <= 0} onClick={onSendMessage}
             className={`${loading || user?.credits <= 0 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
           >

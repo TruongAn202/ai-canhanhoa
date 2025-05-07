@@ -3,6 +3,7 @@ import Header from '../(main)/_components/HeaderHome'
 import Footer from "@/components/footer/Footer";
 function About() {
   return (
+    //trang about
     <>
     <Header />
     <div className="max-w-3xl mx-auto p-6">

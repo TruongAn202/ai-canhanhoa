@@ -32,6 +32,7 @@ import { XacThucContext } from "@/context/XacThucContext";
 import { CaNhanHoaContext } from "@/context/CaNhanHoaContext";
 import { Loader2Icon } from "lucide-react";
 
+//cua so them moi AI
 
 const DEFAULT_CANHANHOA = {
   image: "/baomat.png",
@@ -46,25 +47,25 @@ const DEFAULT_CANHANHOA = {
 
 function ThemMoiCaNhanHoa({ children }: any) {
   //có 1 phần tử con trong nó ví dụ button
-  const [selectedCaNhanHoa, setSelectedCaNhanHoa] = useState<CANHANHOA>(DEFAULT_CANHANHOA);
+  const [selectedCaNhanHoa, setSelectedCaNhanHoa] = useState<CANHANHOA>(DEFAULT_CANHANHOA);//trang thai AI mac dinh
   const AddCaNhanHoa = useMutation(api.userAiCaNhanHoa.InsertSelectedCaNhanHoa);//ham them ai 
-  const { user } = useContext(XacThucContext);
+  const { user } = useContext(XacThucContext);//thong tin user
   const [loading, setLoading] = useState(false);
   const { canhanhoa, setCaNhanHoa } = useContext(CaNhanHoaContext);
 
   const onHandleInputChange = (field: string, value: string) => {
     setSelectedCaNhanHoa((prev: any) => ({
       ...prev, //giu lai cac trường cũ
-      [field]: value, 
+      [field]: value, //them cac gia tri moi
     }));
   }
   const onSave = async () => {
-    if (!selectedCaNhanHoa?.name || !selectedCaNhanHoa.title || !selectedCaNhanHoa.userInstruction) {
+    if (!selectedCaNhanHoa?.name || !selectedCaNhanHoa.title || !selectedCaNhanHoa.userInstruction) {//kt thong tin
       toast('Bạn chưa điền đủ thông tin cho AI')
       return;
     }
     setLoading(true)
-    const result = await AddCaNhanHoa({ //them list AI vao csdl
+    const result = await AddCaNhanHoa({ //them list AI vao csdl convex
       records: [selectedCaNhanHoa],
       uid: user?._id
     })
@@ -86,11 +87,13 @@ function ThemMoiCaNhanHoa({ children }: any) {
                 <Button variant={"secondary"} size={"sm"} className="w-full cursor-pointer" onClick={() => setSelectedCaNhanHoa(DEFAULT_CANHANHOA)}>
                   + Tạo mới AI
                 </Button>
+                {/* hien thi danh sach cac AI da tao san */}
                 <div className="mb-2">
                   {AICaNhanHoaList.map((canhanhoa, index) => (
                     <div
                       key={index}
                       className=" p-2 hover:bg-secondary flex gap-2 items-center rounded-xl cursor-pointer"
+                      // click vao2 AI nao2 thi se anh xa ai do len khung ben phai 
                       onClick={() => setSelectedCaNhanHoa(canhanhoa)}
                     >
                       <Image
@@ -109,6 +112,7 @@ function ThemMoiCaNhanHoa({ children }: any) {
               <div className="col-span-2">
                 <div className="flex gap-5">
                   {selectedCaNhanHoa && (
+                    //da co CaNhanHoaAvatar, click vào xổ ra các ảnh đê chọn
                     <CaNhanHoaAvatar selectedImage={(v: string) => onHandleInputChange('image', v)}>
                       <Image
                         src={selectedCaNhanHoa?.image}
@@ -121,11 +125,12 @@ function ThemMoiCaNhanHoa({ children }: any) {
                   )}
                   <div className=" flex flex-col gap-3 w-full">
                     <Input
+                    //khung nhap tên AI
                       placeholder="Nhập tên của AI"
                       className="w-full"
                       value={selectedCaNhanHoa?.name}
                       onChange={(event) =>
-                        onHandleInputChange("name", event.target.value)
+                        onHandleInputChange("name", event.target.value)//hàm này giu cac truong cu, chi thay doi truong chi dinh
                       }
                     />
                     <Input
@@ -141,7 +146,8 @@ function ThemMoiCaNhanHoa({ children }: any) {
                 <div className="mt-4">
                   <h2 className="text-gray-500">Chọn mô hình AI:</h2>
                   <Select
-                    key={selectedCaNhanHoa?.aiModelId} // 👈 mỗi lần thay đổi sẽ reset an toàn
+                  //chon model ai
+                    key={selectedCaNhanHoa?.aiModelId} // mỗi lần thay đổi sẽ reset an toàn
                     value={selectedCaNhanHoa?.aiModelId}
                     onValueChange={(value) => onHandleInputChange("aiModelId", value)}
                   >
@@ -150,6 +156,7 @@ function ThemMoiCaNhanHoa({ children }: any) {
                     </SelectTrigger>
                     <SelectContent>
                       {AiModeOption.map((model, index) => (
+                        //cac option model ai
                         <SelectItem key={index} value={model.name}>
                           <div className="flex gap-2 items-center m-1">
                             <Image
@@ -169,6 +176,7 @@ function ThemMoiCaNhanHoa({ children }: any) {
                 <div className="mt-5">
                   <p className="text-gray-500">Chỉ dẫn AI</p>
                   <Textarea placeholder="Thêm chỉ dẫn cho AI"
+                  //cap nhat chi den cho ai
                     value={selectedCaNhanHoa.userInstruction}
                     onChange={(event) => onHandleInputChange('userInstruction', event.target.value)}
                     className="h-[200px]"

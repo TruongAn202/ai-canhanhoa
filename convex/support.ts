@@ -2,7 +2,7 @@ import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { query } from "./_generated/server"; // Chắc chắn rằng bạn đang import đúng
 // Mutation để tạo ticket yêu cầu hỗ trợ
-export const CreateSupportTicket = mutation({
+export const CreateSupportTicket = mutation({//tao yeu cau
   args: {
     name: v.string(),
     email: v.string(),
@@ -23,7 +23,7 @@ export const CreateSupportTicket = mutation({
 // Trong file API của bạn (ví dụ: convex/api/support.ts)
 
 
-export const GetAllSupportTickets = query({
+export const GetAllSupportTickets = query({//lay tat ca yeu cau ho tro
   handler: async (ctx) => {
     const tickets = await ctx.db
       .query('support')
@@ -33,7 +33,7 @@ export const GetAllSupportTickets = query({
   }
 });
 
-export const GetSupportTicketById = query({
+export const GetSupportTicketById = query({//lay yeu cau ho tro bang id
     args: { id: v.id("support") },
     handler: async (ctx, args) => {
       return await ctx.db.get(args.id);
@@ -41,7 +41,7 @@ export const GetSupportTicketById = query({
   });
   
   // trong convex/support.ts
-export const UpdateSupportStatus = mutation({
+export const UpdateSupportStatus = mutation({//cap nhat trang thai
     args: {
       id: v.id("support"),
       status: v.boolean(), // thêm status làm tham số

@@ -1,5 +1,5 @@
 import React from 'react'
-
+//footer cua trang
 function Footer() {
   return (
     <footer className="bg-gray-900 text-white text-center p-5">

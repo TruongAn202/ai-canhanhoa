@@ -91,7 +91,7 @@ export default function QuanLyBlog() {
     }
   };
   
-  const handleEdit = (blog: any) => { // Hàm xử lý khi chỉnh sửa blog
+  const handleEdit = (blog: any) => { // khi ng dung click vào 1 trong ds blog, sẽ ánh xạ lên from
     setForm({ // Cập nhật lại form với dữ liệu của blog đang chỉnh sửa
       title: blog.title,
       description: blog.description,
@@ -108,6 +108,7 @@ export default function QuanLyBlog() {
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold">{editing ? "Chỉnh Sửa Blog" : "Thêm Blog Mới"}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Nếu người dùng nhập "Blog mới", giá trị form.title sẽ được cập nhật thành "Blog mới" sau khi hàm handleChange được gọi. */}
         <input name="title" value={form.title} onChange={handleChange} placeholder="Tiêu đề" className="border p-2 rounded" />
         <input name="slug" value={form.slug} onChange={handleChange} placeholder="Slug (ví dụ: blog-bai-viet-1)" className="border p-2 rounded" />
         <input name="description" value={form.description} onChange={handleChange} placeholder="Mô tả" className="border p-2 rounded" />
@@ -122,12 +123,14 @@ export default function QuanLyBlog() {
           <input
             type="text"
             value={newCategory}
+            //Mỗi khi người dùng thay đổi giá trị trong ô nhập liệu, hàm setNewCategory sẽ được gọi để cập nhật giá trị mới cho newCategory (tức là giá trị người dùng nhập vào).
             onChange={(e) => setNewCategory(e.target.value)}
             placeholder="Thêm thể loại mới"
             className="border p-2 rounded flex-1"
           />
           <button
             type="button"
+            //Khi người dùng nhấp vào nút, hàm handleAddCategory sẽ được gọi để xử lý hành động thêm thể loại mới lên convex
             onClick={handleAddCategory}
             className="bg-blue-500 text-white px-3 py-2 rounded cursor-pointer"
           >
@@ -143,11 +146,11 @@ export default function QuanLyBlog() {
         placeholder="Nội dung bài viết (Markdown hoặc HTML)"
         className="border p-2 rounded w-full h-40"
       />
-
+      {/* nut thay doi khu sua hoac them blog */}
       <button onClick={handleSubmit} className="bg-black text-white px-4 py-2 rounded cursor-pointer">
         {editing ? "Sửa" : "Thêm Blog"}
       </button>
-
+        {/* Danh sách các blog */}
       <h3 className="text-xl font-semibold mt-8">Danh sách blog đã thêm</h3>
       <div className="h-[500px] overflow-auto border border-gray-300 rounded-md">
         <table className="w-full table-auto border mt-2">
@@ -162,6 +165,7 @@ export default function QuanLyBlog() {
           </thead>
           <tbody>
             {currentBlogs?.map((blog: any) => (
+              //danh sach blog sau kh phan trang
               <tr key={blog._id} onClick={() => handleEdit(blog)} className="cursor-pointer hover:bg-gray-100">
                 <td className="p-2 border">{blog.title}</td>
                 <td className="p-2 border">{blog.author}</td>

@@ -32,8 +32,11 @@ function Provider({
     }, []);//chỉ chạy 1 lần
 
   return (
+    //Cung cấp Google OAuth context cho toàn bộ ứng dụng,xac thuc tai khoan gg
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+      {/* Bao toàn app bằng Convex Provider, có thể gọi useQuery, useMutation... từ Convex (cơ sở dữ liệu realtime/serverless). */}
       <ConvexProvider client={convex}>
+        {/* chia sẽ trang thai dang nhập khap app */}
       <XacThucContext.Provider value={{ user, setUser, isLoadingUser }}>
           <NextThemesProvider
             attribute="class"

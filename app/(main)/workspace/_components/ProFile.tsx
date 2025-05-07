@@ -17,9 +17,9 @@ import { WalletIcon } from 'lucide-react';
 
 
 function ProFile({ openDialog, setOpenDialog }: any) {
-    const [isLoading, setIsLoading] = useState(false);
-    const { user } = useContext(XacThucContext);
-    const [maxToken, setMaxToken] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState(false);// trang thai loading
+    const { user } = useContext(XacThucContext);//thong tin user
+    const [maxToken, setMaxToken] = useState<number>(0);//so roken cao nhat cua goi 
     useEffect(() => {
         if (user?.orderId) {
             setMaxToken(500000)
@@ -83,10 +83,10 @@ function ProFile({ openDialog, setOpenDialog }: any) {
                                                 body: JSON.stringify({ userId: user._id }),//truyen id user
                                             });
 
-                                            const data = await res.json();
+                                            const data = await res.json();//phan hoi chuoi json
 
                                             if (data?.payUrl) {
-                                                window.location.href = data.payUrl;
+                                                window.location.href = data.payUrl;//chuyen hiuong den trang thanh toan momo
                                             } else {
                                                 alert('Không thể tạo thanh toán. Vui lòng thử lại!');
                                             }

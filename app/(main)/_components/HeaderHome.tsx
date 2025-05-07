@@ -16,13 +16,16 @@ export default function Header() {
     }`;
 
   return (
+    // flex: Hiển thị phần tử theo dạng flexbox (ngang mặc định),justify-between : Các phần tử con được đẩy ra 2 đầu
     <div className="px-14 py-4 shadow-sm flex justify-between items-center w-full bg-white">
       {/* Logo */}
       <Link href="/">
         <Image src="/logo.svg" alt="Logo" width={150} height={150} />
       </Link>
 
-      {/* Menu điều hướng */}
+      {/* Menu điều hướng
+         md:flex: Bắt đầu từ kích thước màn hình medium (≥768px), phần tử sẽ hiển thị dạng flex (ngang), //gap-8: Tạo khoảng cách giữa các phần tử con
+      */}
       <nav className="hidden md:flex gap-8 text-lg font-medium">
         <Link href="/documentation" className={linkClass("/documentation")}>
           Tài Liệu

@@ -1,13 +1,13 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useParams } from "next/navigation";
+import { useQuery, useMutation } from "convex/react";//cú phap truy van va cap nhat du lieu cua convex
+import { api } from "@/convex/_generated/api";//Import object `api` đã được auto-generate để gọi API Convex một cách an toàn (có kiểm tra kiểu)
+import { useParams } from "next/navigation";//Lấy `params` trên URL, ví dụ: /dashboard/abc123 sẽ trả về { id: "abc123" }
 import { Button } from "@/components/ui/button";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id } from "@/convex/_generated/dataModel";//Dùng `Id<"support">` để đảm bảo biến `ticketId` đúng kiểu ID trong bảng `support`
 
 export default function TicketDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams();//lay id
   const ticketId = id as Id<"support">; // ✅ Ép kiểu cho đúng Convex
 
   const ticket = useQuery(api.support.GetSupportTicketById, { id: ticketId });

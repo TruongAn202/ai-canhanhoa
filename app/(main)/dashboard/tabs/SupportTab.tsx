@@ -15,7 +15,7 @@ export default function SupportTab() {
   const searchParams = useSearchParams(); // Lấy đối tượng searchParams từ URL
   const searchQuery = searchParams.get("q")?.toLowerCase() || ""; // Lấy giá trị query 'q' từ URL và chuyển sang chữ thường
 
-  const selectedTicket = tickets?.find((t) => t._id === selectedId); // Tìm yêu cầu hỗ trợ được chọn từ danh sách
+  const selectedTicket = tickets?.find((t) => t._id === selectedId); //   selectedId để tìm ra selectedTicket: khi click chuột vào 1 yêu cầu
 
   const filteredTickets = useMemo(() => { // Dùng useMemo để lọc danh sách yêu cầu hỗ trợ khi có thay đổi tickets hoặc searchQuery
     if (!tickets) return []; // Nếu không có tickets thì trả về mảng rỗng
@@ -26,11 +26,11 @@ export default function SupportTab() {
 
   if (!tickets) return <div>Loading...</div>; // Nếu tickets chưa được tải, hiển thị "Loading..."
 
-  if (selectedTicket) {
+  if (selectedTicket) {//Và nếu có selectedTicket (tức là đã chọn 1 dòng), thì giao diện sẽ chuyển sang hiển thị chi tiết yêu cầu hỗ trợ với phần:
     return (
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Chi tiết yêu cầu hỗ trợ</h1>
-
+        {/* CHi tiết yêu cầu */}
         <div className="bg-white border rounded-lg p-6 shadow-md max-w-2xl">
           <p><strong>ID:</strong> {selectedTicket._id}</p>
           <p><strong>Họ tên:</strong> {selectedTicket.name}</p>
@@ -48,6 +48,7 @@ export default function SupportTab() {
           <div className="mt-6 flex gap-3">
             {!selectedTicket.status && (
               <Button
+              //cap nhat trang thai lên coonvex
                 onClick={async () => {
                   await updateStatus({ id: selectedTicket._id, status: true });
                   setSelectedId(null);
@@ -60,6 +61,7 @@ export default function SupportTab() {
 
             {selectedTicket.status && (
               <Button
+              //mở lại yêu cầu
                 onClick={async () => {
                   await updateStatus({ id: selectedTicket._id, status: false });
                   setSelectedId(null);
@@ -71,6 +73,7 @@ export default function SupportTab() {
             )}
 
             <Button
+            //set null de quay lai danh sach yeu cau ban dau
               onClick={() => setSelectedId(null)}
               variant="outline"
               className="border-gray-400"
@@ -87,6 +90,7 @@ export default function SupportTab() {
     <div>
       <h1 className="text-2xl font-bold mb-4">Yêu cầu hỗ trợ</h1>
       <ReusableTable
+      //onRowClick={(ticket) => setSelectedId(ticket._id)}: Đây là sự kiện khi click vào một dòng trong bảng. Nó sẽ lấy _id của ticket đó và gọi setSelectedId(...) để lưu lại ID của yêu cầu đã được chọn.
         data={filteredTickets}
         onRowClick={(ticket) => setSelectedId(ticket._id)}
         columns={[

@@ -6,25 +6,25 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { googleLogout } from '@react-oauth/google' //dang xuat googles
 
 function Header() {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname();//Trả về đường dẫn hiện tại (pathname) của trang
+  const router = useRouter();//Cung cấp đối tượng router để điều khiển chuyển hướng (navigation) trong ứng dụng
   const isPersonalizedAI = pathname === "/ai-canhanhoa";
   const isDashboard = pathname === "/dashboard";
-  const { user, setUser } = useContext(XacThucContext);
+  const { user, setUser } = useContext(XacThucContext);//thong tin user da dang nhap
 
   const [showDropdown, setShowDropdown] = useState(false);
   const avatarRef = useRef<HTMLDivElement>(null); 
 
   // Click ra ngoài thì ẩn dropdown
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (avatarRef.current && !avatarRef.current.contains(event.target)) {
-        setShowDropdown(false);
+    const handleClickOutside = (event: any) => { // Xử lý khi click ra ngoài dropdown
+      if (avatarRef.current && !avatarRef.current.contains(event.target)) { // Nếu click không nằm trong avatarRef
+        setShowDropdown(false); // Ẩn dropdown
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside); // Thêm sự kiện lắng nghe click chuột
+    return () => document.removeEventListener('mousedown', handleClickOutside);// Cleanup khi unmount
+  }, []);// Chạy 1 lần sau khi component mount
 
   // Hàm đăng xuất
   const handleLogout = () => {
@@ -47,6 +47,7 @@ function Header() {
   };
   
   return (
+    //  flex justify-between items-center: Flex box, căn giữa và tách phần tử 2 bên
     <div className={`border-b border-gray-300 pl-8 shadow-sm flex justify-between items-center px-14 ${isPersonalizedAI || isDashboard ? '' : 'fixed'}`}>
       <Image src={'/logo.svg'} alt='logo' width={isPersonalizedAI || isDashboard ? 200 : 40} height={isPersonalizedAI || isDashboard ? 200 : 40} />
 
@@ -60,8 +61,11 @@ function Header() {
             className="rounded-full cursor-pointer"
             onClick={() => setShowDropdown(!showDropdown)}
           />
-
+          
           {showDropdown && (
+            //rounded	Bo góc. z-50 là z-index để nổi lên cao
+            //block: Hiển thị như một khối chiếm toàn bộ chiều ngang.
+            //px-4	Padding ngang(trai phai), py padding dọc
             <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow z-50">
               <button
                 onClick={handleLogout}

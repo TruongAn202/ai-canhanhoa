@@ -73,7 +73,7 @@ export default function AccountsTab() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Quản lý tài khoản</h1>
-
+        {/* cho chieu cao toi thieu 500px */}
       <div className="h-[500px] overflow-auto border border-gray-300 rounded-md">
         <table className="min-w-full">
           <thead>
@@ -87,6 +87,7 @@ export default function AccountsTab() {
             </tr>
           </thead>
           <tbody>
+            {/*duyệt trên danh sach đã cắt */}
             {paginatedUsers?.map((user) => (
               <tr key={user._id} className="text-sm text-gray-800 hover:bg-gray-50 transition cursor-pointer">
                 <td className="px-4 py-2 border border-gray-300">{user.name}</td>
@@ -101,9 +102,11 @@ export default function AccountsTab() {
                 </td>
                 <td className="px-4 py-2 border border-gray-300">{user.role}</td>
                 <td className="px-4 py-2 border border-gray-300 relative">
+                  {/* nut chuc nang , click mở dropdow */}
                   <button
                     onClick={() =>
-                      setOpenDropdown(openDropdown === user._id ? null : user._id)
+                      // openDropdown: là state hiện tại đang lưu user._id của dropdown đang mở (hoặc null nếu không có dropdown nào mở).
+                      setOpenDropdown(openDropdown === user._id ? null : user._id) 
                     }
                     className="px-2 py-1 text-gray-600 hover:text-black cursor-pointer"
                   >
@@ -116,7 +119,7 @@ export default function AccountsTab() {
                       className="absolute z-10 mt-1 right-0 bg-white border border-gray-200 rounded shadow-md w-36 "
                     >
                       <button
-                        onClick={() => {
+                        onClick={() => {//phan quyen admin
                           handleRoleChange(user._id, "admin", user.role ?? "user")
                           setOpenDropdown(null);
                         }}
@@ -125,7 +128,7 @@ export default function AccountsTab() {
                         Phân quyền admin
                       </button>
                       <button
-                        onClick={() => {
+                        onClick={() => {//phan quyen  user
                           handleRoleChange(user._id, "user", user.role ?? "user")
                           setOpenDropdown(null);
                         }}
@@ -135,6 +138,7 @@ export default function AccountsTab() {
                       </button>
                       <button
                         onClick={() => {
+                          //xoa tai khoan
                           handleDeleteUser(user._id);
                           setOpenDropdown(null);
                         }}
@@ -156,11 +160,12 @@ export default function AccountsTab() {
         </table>
       </div>
 
-      {/* Phân trang */}
+      {/* Phân trang : flex justify-center: dùng Flexbox để canh giữa nội dung theo chiều ngang. */}
       <div className="mt-4 flex justify-center gap-2">
         <button
+        //onClick: khi bấm, giảm số trang hiện tại currentPage đi 1, nhưng không nhỏ hơn 1 (dùng Math.max).
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
+          disabled={currentPage === 1}//nếu đang ở trang 1 thì vô hiệu hóa nút.
           className="px-3 py-1 border rounded disabled:opacity-50 cursor-pointer"
         >
           Trang trước
@@ -169,6 +174,7 @@ export default function AccountsTab() {
           Trang {currentPage} / {totalPages}
         </span>
         <button
+        //onClick: tăng currentPage lên 1 nhưng không vượt quá totalPages.
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
           className="px-3 py-1 border rounded disabled:opacity-50 cursor-pointer"

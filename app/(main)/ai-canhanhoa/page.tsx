@@ -59,19 +59,19 @@ function AICaNhanHoa() {
   // Xử lý sự kiện khi người dùng chọn một mục cá nhân hóa
   const onSelect = (canhanhoa: CANHANHOA) => {
     // Kiểm tra xem mục đã được chọn chưa
-    const item = selectedAICaNhanHoa && selectedAICaNhanHoa.find((item: CANHANHOA) => item.id == canhanhoa.id);
-    if (item) {
-      setSelectedAICaNhanHoa(
-        selectedAICaNhanHoa.filter((item: CANHANHOA) => item.id !== canhanhoa.id)
+    const item = selectedAICaNhanHoa && selectedAICaNhanHoa.find((item: CANHANHOA) => item.id == canhanhoa.id);//trong danh sách các mục đã chọn (selectedAICaNhanHoa) có mục hiện tại (canhanhoa) hay chưa, dựa vào id.
+    if (item) {//neu da chon : Loại bỏ mục đó ra khỏi danh sách đã chọn.
+      setSelectedAICaNhanHoa(//Hàm dùng để cập nhật lại state selectedAICaNhanHoa
+        selectedAICaNhanHoa.filter((item: CANHANHOA) => item.id !== canhanhoa.id)//Tạo ra một mảng mới loại bỏ item có id giống canhanhoa.id   item.id !== canhanhoa.id: Chỉ giữ lại những mục khác mục đang click 
       );
       return;
     }
     // Nếu chưa chọn, thêm mục vào danh sách
-    setSelectedAICaNhanHoa((prev) => [...prev, canhanhoa]);
+    setSelectedAICaNhanHoa((prev) => [...prev, canhanhoa]);//(prev) => [...prev, canhanhoa]: Dùng arrow function để lấy prev (giá trị cũ), rồi thêm mới canhanhoa vào cuối mảng bằng cú pháp spread [...prev, canhanhoa].
   };
   // Kiểm tra xem một mục có đang được chọn hay không
   const IsCaNhanHoaSelected = (canhanhoa: CANHANHOA) => {
-    const item =
+    const item =//tìm xem mục hiện tại có nằm trong danh sách selectedAICaNhanHoa không.
       selectedAICaNhanHoa &&
       selectedAICaNhanHoa.find((item: CANHANHOA) => item.id == canhanhoa.id);
     return item ? true : false;

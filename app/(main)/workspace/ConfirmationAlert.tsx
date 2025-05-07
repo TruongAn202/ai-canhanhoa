@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+//component de goi truoc khi xoa ai
 function ConfirmationAlert({children,OnDelete}:any) {
   return (
     <AlertDialog>

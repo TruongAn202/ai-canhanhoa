@@ -1,7 +1,7 @@
 import { mutation,query } from './_generated/server';
 import { v } from 'convex/values';
 
-export const updateUserOrderAndCredit = mutation({
+export const updateUserOrderAndCredit = mutation({//cap nhat token va orderid
   args: {
     userId: v.id('users'),
     orderId: v.string(),
@@ -15,7 +15,7 @@ export const updateUserOrderAndCredit = mutation({
     });
   },
 });
-export const ghiNhanGiaoDich = mutation({
+export const ghiNhanGiaoDich = mutation({//giao dich thanh cong thi luu vao convex
     args: {
       transactionId: v.string(),
       userId: v.id('users'),
@@ -54,7 +54,7 @@ export const GetAllTransactions = query({
   },
 });
 
-export const GetAllTransactionsWithUser = query({
+export const GetAllTransactionsWithUser = query({//tat ca giao dich va user
   args: {},
   handler: async (ctx) => {
     const transactions = await ctx.db.query("momoTransactions").collect();
